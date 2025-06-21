@@ -44,12 +44,7 @@ y = "3"`;
     const compressedWitness = fs.readFileSync(witnessPath);
     const witnessData = decompressSync(compressedWitness);
     
-    // Create proof
-    await bb.commonInitSlabAllocator(bytecode.length);
-    const proof = await bb.createProof(bytecode, witnessData);
-    
-    console.log("📄 Proof generated!");
-    console.log(`Proof length: ${proof.length} bytes`);
+    const proofPath = path.join(process.cwd(), 'target/proof');
     
     // Step 3: Get deployed contract address
     console.log("📍 Getting ArrayVerifierEntry address...");
