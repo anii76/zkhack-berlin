@@ -7,6 +7,8 @@ echo "📝 Creating Prover.toml with test inputs..."
 cat > Prover.toml << EOF
 array1 = ["20", "5", "92"]
 array2 = ["20", "5", "92"]
+x = "3"
+y = "3"
 EOF
 
 echo "🔨 Compiling circuit..."
