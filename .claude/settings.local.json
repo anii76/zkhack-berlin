@@ -10,7 +10,9 @@
       "Bash(notify-send:*)",
       "Bash(mv:*)",
       "Bash(ls:*)",
-      "Bash(nargo codegen-verifier:*)"
+      "Bash(nargo codegen-verifier:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm build:*)"
     ],
     "deny": []
   }
