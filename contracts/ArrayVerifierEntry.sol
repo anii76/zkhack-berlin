@@ -14,7 +14,8 @@ contract ArrayVerifierEntry {
     }
     
     function verifyArraysMatch(
-        bytes calldata proof
+        bytes calldata proof,
+        uint256[3] calldata inputArray
     ) external view returns (bool) {
         // Build public inputs array for the verifier
         // The public inputs are the target array values

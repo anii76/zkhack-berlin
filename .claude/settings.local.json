@@ -8,7 +8,9 @@
       "Bash(mkdir:*)",
       "Bash(bb write_vk:*)",
       "Bash(notify-send:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(ls:*)",
+      "Bash(nargo codegen-verifier:*)"
     ],
     "deny": []
   }
