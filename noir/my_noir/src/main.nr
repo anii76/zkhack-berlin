@@ -7,7 +7,7 @@ fn main(probeFace: [Field; 128], referenceFace: pub [Field; 128]) {
 #[test]
 fn test_main() {
     let faceA: [Field; 128] = [0; 128];
-    let faceB: [Field; 128] = [1; 128];
+    let _faceB: [Field; 128] = [1; 128];
     main(faceA, faceA);
 
 
