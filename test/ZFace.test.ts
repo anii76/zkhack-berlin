@@ -48,12 +48,12 @@ it("proves and verifies on-chain", async () => {
   expect(result).to.eq(true);
 
   // You can also verify in JavaScript.
-  // const resultJs = await backend.verifyProof(
-  //   {
-  //     proof,
-  //     publicInputs: faceABytes.map(String),
-  //   },
-  //   { keccak: true },
-  // );
-  // expect(resultJs).to.eq(true);
+   const resultJs = await backend.verifyProof(
+     {
+       proof,
+       publicInputs,
+     },
+     { keccak: true },
+  );
+  expect(resultJs).to.eq(true);
 });
