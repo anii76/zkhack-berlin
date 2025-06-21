@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nargo check:*)",
+      "Bash(export NARGO_HOME=\"/home/vividn/.nargo\")",
+      "Bash(export PATH=\"$PATH:$NARGO_HOME/bin\")",
+      "Bash(export:*)",
+      "Bash(mkdir:*)",
+      "Bash(bb write_vk:*)",
+      "Bash(notify-send:*)",
+      "Bash(mv:*)",
+      "Bash(ls:*)",
+      "Bash(nargo codegen-verifier:*)"
+    ],
+    "deny": []
+  }
+}
