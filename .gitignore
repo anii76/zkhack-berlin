@@ -1,2 +1,16 @@
 target/
+
+# Foundry build artifacts
+out/
+cache/
+artifacts/
+broadcast/
+gas-snapshots/
+logs/
+
+# Node dependencies (if using JavaScript tooling)
+node_modules/
+
+# Environment files
 .env
+.env.*

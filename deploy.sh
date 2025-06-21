@@ -8,11 +8,20 @@ NETWORK=${1:-local}
 
 echo "🚀 Deploying to $NETWORK..."
 
-# Run the deployment script
-forge script script/Deploy.s.sol:DeployScript \
-    --rpc-url $NETWORK \
-    --broadcast \
-    --verify \
-    -vvvv
+# Check if deploying locally
+if [ "$NETWORK" = "local" ]; then
+    # Local deployment without verification
+    forge script script/Deploy.s.sol:DeployScript \
+        --rpc-url $NETWORK \
+        --broadcast \
+        -vvvv
+else
+    # Other networks with verification
+    forge script script/Deploy.s.sol:DeployScript \
+        --rpc-url $NETWORK \
+        --broadcast \
+        --verify \
+        -vvvv
+fi
 
 echo "✅ Deployment complete!"

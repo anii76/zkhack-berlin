@@ -35,7 +35,12 @@ array2 = ["20", "5", "92"]
 
 Generate the proof:
 ```bash
-nargo prove
+# Compile and generate witness
+nargo compile
+nargo execute
+
+# Generate proof with Barretenberg
+bb prove -b ./target/zface_cash.json -w ./target/witness.gz -o ./proofs/proof
 ```
 
 ### 2. Deploy contracts
@@ -43,6 +48,6 @@ nargo prove
 - Deploy `contracts/ArrayVerifierEntry.sol` with the Verifier address
 
 ### 3. Verify on-chain
-Call `verifyArraysMatch(proof, [20, 5, 92])` on the ArrayVerifierEntry contract.
+Call `verifyArraysMatch(proof)` on the ArrayVerifierEntry contract.
 
 The function will return `true` if the proof is valid and the arrays match.
