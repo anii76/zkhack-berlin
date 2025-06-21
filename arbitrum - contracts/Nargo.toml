@@ -1,0 +1,6 @@
+[package]
+name = "zface.cash"
+type = "bin"
+authors = [""]
+
+[dependencies]
