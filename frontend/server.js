@@ -19,6 +19,7 @@ app.get('/scan', (req, res) => res.sendFile(path.join(viewsDir, 'scan.html')))
 app.get('/generating', (req, res) => res.sendFile(path.join(viewsDir, 'generating.html')))
 app.get('/receive', (req, res) => res.sendFile(path.join(viewsDir, 'receive.html')))
 app.get('/face-scan', (req, res) => res.sendFile(path.join(viewsDir, 'face-scan.html')))
+app.get('/success', (req, res) => res.sendFile(path.join(viewsDir, 'success.html')))
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 

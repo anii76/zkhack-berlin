@@ -93,9 +93,11 @@
           setTimeout(() => {
             document.getElementById('scan-loading').classList.add('hidden');
             if (detection) {
-              document.getElementById('scan-controls').style.display = 'none';
-              document.getElementById('scan-success').classList.remove('hidden');
               if (stream) stream.getTracks().forEach(t => t.stop());
+              // Mock values for amount/address
+              const amount = '0.5ETH';
+              const address = '0x123...abc';
+              window.location.href = `/success?amount=${encodeURIComponent(amount)}&address=${encodeURIComponent(address)}`;
             } else {
               this.disabled = false;
               this.innerHTML = '<span class="truncate">Scan Face</span>';

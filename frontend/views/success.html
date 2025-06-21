@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Success - ZKPay</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-slate-50 justify-center items-center group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="flex flex-col items-center justify-center py-12">
+        <div class="text-green-600 text-5xl mb-4">🎉</div>
+        <div class="text-green-700 text-2xl font-bold mb-2">Success!</div>
+        <div class="text-[#0d141c] text-base font-normal mb-4 text-center">You have claimed your funds.</div>
+        <div id="claim-details" class="text-[#0d141c] text-sm font-mono text-center"></div>
+        <a href="/" class="mt-8 inline-block bg-[#0c7ff2] text-white rounded px-6 py-2 font-bold">Back to Home</a>
+      </div>
+    </div>
+    <script>
+      // Show claim details if ?amount=...&address=... in URL
+      function getQueryParams() {
+        const params = {};
+        window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k, v) {
+          params[k] = decodeURIComponent(v);
+        });
+        return params;
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        const params = getQueryParams();
+        let details = '';
+        if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
+        if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
+        document.getElementById('claim-details').innerHTML = details;
+      });
+    </script>
+  </body>
+</html> 
