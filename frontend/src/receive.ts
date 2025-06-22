@@ -1,6 +1,13 @@
 // TypeScript global declarations for browser globals
 declare global {
-  interface Window { ethers: any; ethereum: any; }
+  interface Window { 
+    ethers: any; 
+    ethereum: any; 
+    faceapi: any;
+    quantize_1: any;
+    threshold_1: any;
+    faceProver_1: any;
+  }
 }
 
 export {};
@@ -267,5 +274,149 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
       }
     };
+  }
+  
+  // --- Face Scanning Logic ---
+  let stream: MediaStream | undefined;
+  let isModelLoaded = false;
+  
+  async function startWebcam(): Promise<void> {
+    const videoEl = document.getElementById('inputVideo') as HTMLVideoElement;
+    if (!videoEl) return;
+    try {
+      // Use the front (selfie) camera by default
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+    } catch (err) {
+      // fallback to any camera
+      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    }
+    if (videoEl) {
+      videoEl.srcObject = stream;
+    }
+  }
+  
+  async function loadFaceModels(): Promise<void> {
+    await window.faceapi.nets.tinyFaceDetector.load('/models/');
+    await window.faceapi.nets.faceRecognitionNet.load('/models/');
+    isModelLoaded = true;
+  }
+  
+  async function detectFace(): Promise<any> {
+    const videoEl = document.getElementById('inputVideo') as HTMLVideoElement;
+    const canvas = document.getElementById('overlay') as HTMLCanvasElement;
+    if (!videoEl || !canvas) return null;
+    
+    const displaySize = { width: videoEl.videoWidth, height: videoEl.videoHeight };
+    window.faceapi.matchDimensions(canvas, displaySize);
+    const detection = await window.faceapi.detectSingleFace(videoEl, new window.faceapi.TinyFaceDetectorOptions());
+    const resizedDetections = detection ? window.faceapi.resizeResults(detection, displaySize) : null;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    if (resizedDetections) {
+      window.faceapi.draw.drawDetections(canvas, resizedDetections);
+    }
+    return detection;
+  }
+  
+  // Always load face models and start webcam
+  loadFaceModels().then(() => {
+    startWebcam();
+  });
+  
+  // Initialize face scanning if reference embeddings are available
+  if (referenceEmbeddings) {
+    const scanFaceBtn = document.getElementById('scanFaceBtn') as HTMLButtonElement;
+      if (scanFaceBtn) {
+        scanFaceBtn.onclick = async function() {
+          const scanLoading = document.getElementById('scan-loading') as HTMLElement;
+          if (scanLoading) scanLoading.classList.remove('hidden');
+          
+          const button = this as HTMLButtonElement;
+          button.disabled = true;
+          button.innerHTML = '<span class="truncate">Generating proof...</span>';
+          
+          const detection = await detectFace();
+          
+          setTimeout(async () => {
+            if (scanLoading) scanLoading.classList.add('hidden');
+            
+            if (detection) {
+              try {
+                // Compute face descriptor for current scan
+                const videoEl = document.getElementById('inputVideo') as HTMLVideoElement;
+                const currentEmbeddings = await window.faceapi.computeFaceDescriptor(videoEl);
+                
+                console.log('Generating ZK proof for face verification...');
+                
+                // Use the imported THRESHOLD from threshold.js
+                const FACE_THRESHOLD = window.threshold_1?.THRESHOLD || 500000000;
+                
+                // Quantize the face embeddings
+                const quantizedReference = (referenceEmbeddings as number[]).map((value: number) => window.quantize_1.quantize(value));
+                const quantizedProbe = Array.from(currentEmbeddings as ArrayLike<number>).map((value: number) => window.quantize_1.quantize(value));
+                
+                // Generate ZK proof using faceProver
+                const proofResult = await window.faceProver_1.faceProver(
+                  quantizedReference, 
+                  quantizedProbe,
+                  Number(FACE_THRESHOLD)
+                );
+                
+                // Convert proof to hex string
+                const proofHex = '0x' + Array.from(proofResult.proof as ArrayLike<number>)
+                  .map((byte: number) => byte.toString(16).padStart(2, '0'))
+                  .join('');
+                
+                console.log('ZK proof generated successfully');
+                
+                // Stop the camera
+                if (stream) stream.getTracks().forEach(track => track.stop());
+                
+                // Auto-populate proof input
+                const proofInput = document.getElementById('proof-input') as HTMLInputElement;
+                if (proofInput) {
+                  proofInput.value = proofHex;
+                }
+                
+                // Hide face scanner and show success
+                const faceScannerSection = document.getElementById('face-scanner-section') as HTMLElement;
+                if (faceScannerSection) {
+                  faceScannerSection.style.display = 'none';
+                }
+                
+                // Show success message
+                const verificationSuccess = document.createElement('div');
+                verificationSuccess.className = 'text-green-400 text-center mb-4 p-4 bg-green-900/20 rounded-lg border border-green-500/30';
+                verificationSuccess.innerHTML = '✅ Face verification successful! Proof has been generated and is ready for withdrawal.';
+                const container = document.querySelector('.bg-white\\/10') as HTMLElement;
+                if (container) {
+                  container.insertBefore(verificationSuccess, container.children[2]);
+                }
+                
+              } catch (error) {
+                console.error('Face verification failed:', error);
+                button.disabled = false;
+                button.innerHTML = '<span class="truncate">Scan Face & Generate Proof</span>';
+                alert('Face verification failed. This may indicate the faces do not match or there was an error generating the proof. Please try again.');
+              }
+            } else {
+              button.disabled = false;
+              button.innerHTML = '<span class="truncate">Scan Face & Generate Proof</span>';
+              alert('No face detected. Try again.');
+            }
+          }, 1200);
+        };
+      }
+  } else {
+    // Disable scan button if no reference embeddings
+    const scanFaceBtn = document.getElementById('scanFaceBtn') as HTMLButtonElement;
+    if (scanFaceBtn) {
+      scanFaceBtn.disabled = true;
+      scanFaceBtn.innerHTML = 'No Reference Face Available';
+      scanFaceBtn.classList.add('opacity-50');
+    }
   }
 }); 
