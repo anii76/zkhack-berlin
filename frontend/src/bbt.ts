@@ -1,12 +1,12 @@
 const classes = ['amy', 'bernadette', 'howard', 'leonard', 'penny', 'raj', 'sheldon', 'stuart']
 
-function getFaceImageUri(className, idx) {
+function getFaceImageUri(className: string, idx: number): string {
   return `${className}/${className}${idx}.png`
 }
 
-function renderFaceImageSelectList(selectListId, onChange, initialValue) {
+function renderFaceImageSelectList(selectListId: string, onChange: (value: string) => void, initialValue: { className: string; imageIdx: number }): void {
   const indices = [1, 2, 3, 4, 5]
-  function renderChildren(select) {
+  function renderChildren(select: HTMLSelectElement): void {
     classes.forEach(className => {
       const optgroup = document.createElement('optgroup')
       optgroup.label = className
@@ -30,7 +30,7 @@ function renderFaceImageSelectList(selectListId, onChange, initialValue) {
 }
 
 // fetch first image of each class and compute their descriptors
-async function createBbtFaceMatcher(numImagesForTraining = 1) {
+async function createBbtFaceMatcher(numImagesForTraining: number = 1): Promise<any> {
   const maxAvailableImagesPerClass = 5
   numImagesForTraining = Math.min(numImagesForTraining, maxAvailableImagesPerClass)
 

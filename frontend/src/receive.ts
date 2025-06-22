@@ -1,30 +1,37 @@
 // TypeScript global declarations for browser globals
-// @ts-ignore
-interface Window { ethers: any; ethereum: any; }
+declare global {
+  interface Window { ethers: any; ethereum: any; }
+}
+
+export {};
 
 // Extracted from receive.html <script>
 // Show claim success if ?claimed=1&amount=...&address=... in URL
-function getQueryParams() {
-  const params = {};
-  window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k, v) {
+function getQueryParams(): Record<string, string> {
+  const params: Record<string, string> = {};
+  window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k: string, v: string): string {
     params[k] = decodeURIComponent(v);
+    return '';
   });
   return params;
 }
 document.addEventListener('DOMContentLoaded', function() {
   const params = getQueryParams();
   if (params.claimed === '1') {
-    document.getElementById('claim-success').classList.remove('hidden');
+    document.getElementById('claim-success')?.classList.remove('hidden');
     let details = '';
     if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
     if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
-    document.getElementById('claim-details').innerHTML = details;
-    document.getElementById('startFaceScanBtn').style.display = 'none';
+    const claimDetails = document.getElementById('claim-details');
+    if (claimDetails) claimDetails.innerHTML = details;
+    const startBtn = document.getElementById('startFaceScanBtn') as HTMLElement;
+    if (startBtn) startBtn.style.display = 'none';
   }
 });
 // --- Wallet & Withdraw Logic ---
-let userAddress = null;
-let provider, signer;
+let receiveUserAddress: string | null = null;
+let receiveProvider: any;
+let receiveSigner: any;
 const CONTRACT_ABI = [
   { "inputs": [ { "internalType": "address", "name": "_verifier", "type": "address" }, { "internalType": "bytes32[128]", "name": "_faceEncoding", "type": "bytes32[128]" }, { "internalType": "bytes32", "name": "_threshold", "type": "bytes32" } ], "stateMutability": "nonpayable", "type": "constructor" },
   { "inputs": [], "name": "verifier", "outputs": [ { "internalType": "contract HonkVerifier", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" },
@@ -32,7 +39,7 @@ const CONTRACT_ABI = [
   { "inputs": [ { "internalType": "address payable", "name": "to", "type": "address" }, { "internalType": "bytes", "name": "proof", "type": "bytes" } ], "name": "withdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
   { "stateMutability": "payable", "type": "receive" }
 ];
-async function getContractBalance(address) {
+async function getContractBalance(address: string): Promise<string | null> {
   if (!window.ethers) return null;
   try {
     const rpcProvider = new window.ethers.providers.JsonRpcProvider('https://sepolia-rollup.arbitrum.io/rpc');
@@ -44,12 +51,14 @@ document.addEventListener('DOMContentLoaded', async function() {
   const params = getQueryParams();
   // --- Show claim success if claimed=1 ---
   if (params.claimed === '1') {
-    document.getElementById('claim-success').classList.remove('hidden');
+    document.getElementById('claim-success')?.classList.remove('hidden');
     let details = '';
     if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
     if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
-    document.getElementById('claim-details').innerHTML = details;
-    document.getElementById('startFaceScanBtn').style.display = 'none';
+    const claimDetails2 = document.getElementById('claim-details');
+    if (claimDetails2) claimDetails2.innerHTML = details;
+    const startBtn2 = document.getElementById('startFaceScanBtn') as HTMLElement;
+    if (startBtn2) startBtn2.style.display = 'none';
     return;
   }
   const embeddings = params.embeddings;
@@ -57,61 +66,91 @@ document.addEventListener('DOMContentLoaded', async function() {
   // --- Withdraw UI logic ---
   const contractAddr = params.address;
   if (contractAddr) {
-    document.getElementById('contract-address').textContent = 'Contract: ' + contractAddr;
-    document.getElementById('contract-address').classList.remove('hidden');
+    const contractAddrEl = document.getElementById('contract-address');
+    if (contractAddrEl) {
+      contractAddrEl.textContent = 'Contract: ' + contractAddr;
+      contractAddrEl.classList.remove('hidden');
+    }
     const bal = await getContractBalance(contractAddr);
     if (bal !== null) {
-      document.getElementById('contract-balance').textContent = 'Available: ' + bal + ' ETH';
-      document.getElementById('contract-balance').classList.remove('hidden');
+      const contractBalEl = document.getElementById('contract-balance');
+      if (contractBalEl) {
+        contractBalEl.textContent = 'Available: ' + bal + ' ETH';
+        contractBalEl.classList.remove('hidden');
+      }
     }
   }
   // --- Connect Wallet ---
-  document.getElementById('connect-wallet').onclick = async function () {
+  const connectWalletBtn = document.getElementById('connect-wallet') as HTMLButtonElement;
+  if (connectWalletBtn) {
+    connectWalletBtn.onclick = async function () {
     if (window.ethereum && window.ethers) {
-      provider = new window.ethers.providers.Web3Provider(window.ethereum, 'any');
+      receiveProvider = new window.ethers.providers.Web3Provider(window.ethereum, 'any');
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAddress = accounts[0];
-        document.getElementById('wallet-address').textContent = 'Connected: ' + userAddress;
-        document.getElementById('wallet-address').classList.remove('hidden');
-        // Default destination address to user
-        document.getElementById('dest-address').value = userAddress;
-        document.getElementById('withdraw-btn').disabled = false;
-        document.getElementById('withdraw-error').classList.add('hidden');
+        receiveUserAddress = accounts[0];
+        const walletAddress = document.getElementById('wallet-address') as HTMLElement;
+        const destAddress = document.getElementById('dest-address') as HTMLInputElement;
+        const withdrawBtn = document.getElementById('withdraw-btn') as HTMLButtonElement;
+        const withdrawError = document.getElementById('withdraw-error') as HTMLElement;
+        if (walletAddress) {
+          walletAddress.textContent = 'Connected: ' + receiveUserAddress;
+          walletAddress.classList.remove('hidden');
+        }
+        if (destAddress && receiveUserAddress) destAddress.value = receiveUserAddress;
+        if (withdrawBtn) withdrawBtn.disabled = false;
+        if (withdrawError) withdrawError.classList.add('hidden');
       } catch (e) {
-        document.getElementById('withdraw-error').textContent = 'Wallet connection rejected.';
-        document.getElementById('withdraw-error').classList.remove('hidden');
+        const withdrawError = document.getElementById('withdraw-error') as HTMLElement;
+        if (withdrawError) {
+          withdrawError.textContent = 'Wallet connection rejected.';
+          withdrawError.classList.remove('hidden');
+        }
       }
     } else {
-      document.getElementById('withdraw-error').textContent = 'MetaMask or ethers.js not found.';
-      document.getElementById('withdraw-error').classList.remove('hidden');
+      const withdrawError = document.getElementById('withdraw-error') as HTMLElement;
+      if (withdrawError) {
+        withdrawError.textContent = 'MetaMask or ethers.js not found.';
+        withdrawError.classList.remove('hidden');
+      }
     }
-  };
+    };
+  }
   // --- Withdraw ---
-  document.getElementById('withdraw-btn').onclick = async function () {
-    document.getElementById('withdraw-status').classList.add('hidden');
-    document.getElementById('withdraw-error').classList.add('hidden');
-    const dest = document.getElementById('dest-address').value;
-    let proof = document.getElementById('proof-input').value;
-    if (!userAddress || !dest || !window.ethers.utils.isAddress(dest)) {
-      document.getElementById('withdraw-error').textContent = 'Connect wallet and enter a valid destination address.';
-      document.getElementById('withdraw-error').classList.remove('hidden');
-      return;
-    }
+  const withdrawBtnElement = document.getElementById('withdraw-btn') as HTMLButtonElement;
+  if (withdrawBtnElement) {
+    withdrawBtnElement.onclick = async function () {
+      const withdrawStatus = document.getElementById('withdraw-status') as HTMLElement;
+      const withdrawError = document.getElementById('withdraw-error') as HTMLElement;
+      if (withdrawStatus) withdrawStatus.classList.add('hidden');
+      if (withdrawError) withdrawError.classList.add('hidden');
+      const destAddressInput = document.getElementById('dest-address') as HTMLInputElement;
+      const proofInput = document.getElementById('proof-input') as HTMLInputElement;
+      const dest = destAddressInput ? destAddressInput.value : '';
+      let proof = proofInput ? proofInput.value : '';
+      if (!receiveUserAddress || !dest || !window.ethers.utils.isAddress(dest)) {
+        if (withdrawError) {
+          withdrawError.textContent = 'Connect wallet and enter a valid destination address.';
+          withdrawError.classList.remove('hidden');
+        }
+        return;
+      }
     if (!proof) {
       // For now, use dummy proof (empty bytes)
       proof = '0x';
     }
-    if (!contractAddr) {
-      document.getElementById('withdraw-error').textContent = 'No contract address in URL.';
-      document.getElementById('withdraw-error').classList.remove('hidden');
-      return;
-    }
-    // --- BEGIN PATCH: Accept both hex and base64 for proof, and sanitize input ---
-    function isHexString(str) {
+      if (!contractAddr) {
+        if (withdrawError) {
+          withdrawError.textContent = 'No contract address in URL.';
+          withdrawError.classList.remove('hidden');
+        }
+        return;
+      }
+      // --- BEGIN PATCH: Accept both hex and base64 for proof, and sanitize input ---
+      function isHexString(str: string): boolean {
       return /^0x[0-9a-fA-F]*$/.test(str);
     }
-    function base64ToHex(base64) {
+      function base64ToHex(base64: string): string | null {
       try {
         // atob decodes base64 to binary string
         const raw = atob(base64.replace(/\s/g, ''));
@@ -128,47 +167,58 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     // Remove whitespace
     proof = proof.trim();
-    // Accept both hex and base64
-    if (proof && !isHexString(proof)) {
-      // Try to convert from base64 to hex
-      const hexProof = base64ToHex(proof);
-      if (hexProof && isHexString(hexProof)) {
-        proof = hexProof;
-      } else {
-        document.getElementById('withdraw-error').textContent = 'Invalid proof format: must be hex (0x...) or base64.';
-        document.getElementById('withdraw-error').classList.remove('hidden');
-        return;
+      // Accept both hex and base64
+      if (proof && !isHexString(proof)) {
+        // Try to convert from base64 to hex
+        const hexProof = base64ToHex(proof);
+        if (hexProof && isHexString(hexProof)) {
+          proof = hexProof;
+        } else {
+          if (withdrawError) {
+            withdrawError.textContent = 'Invalid proof format: must be hex (0x...) or base64.';
+            withdrawError.classList.remove('hidden');
+          }
+          return;
+        }
       }
-    }
-    // If proof is just "0x" or empty, treat as empty bytes
-    if (!proof || proof === '0x') {
-      proof = '0x';
-    }
+      // If proof is just "0x" or empty, treat as empty bytes
+      if (!proof || proof === '0x') {
+        proof = '0x';
+      }
     // --- END PATCH ---
-    try {
-      const contract = new window.ethers.Contract(contractAddr, CONTRACT_ABI, provider.getSigner());
-      // Use a high manual gas limit, similar to scan.html
-      const manualGasLimit = 8000000;
-      const tx = await contract.withdraw(dest, proof, { gasLimit: manualGasLimit });
-      document.getElementById('withdraw-status').textContent = 'Transaction sent. Waiting for confirmation...';
-      document.getElementById('withdraw-status').classList.remove('hidden');
+      try {
+        const contract = new window.ethers.Contract(contractAddr, CONTRACT_ABI, receiveProvider.getSigner());
+        // Use a high manual gas limit, similar to scan.html
+        const manualGasLimit = 8000000;
+        const tx = await contract.withdraw(dest, proof, { gasLimit: manualGasLimit });
+        if (withdrawStatus) {
+          withdrawStatus.textContent = 'Transaction sent. Waiting for confirmation...';
+          withdrawStatus.classList.remove('hidden');
+        }
       const receipt = await tx.wait();
-      if (receipt && receipt.status === 1) {
-        document.getElementById('withdraw-status').textContent = 'Withdraw successful!';
-        // Optionally redirect or show claim success
-        window.location.href = `/receive?claimed=1&amount=${document.getElementById('contract-balance').textContent.replace('Available: ','')}&address=${contractAddr}`;
-      } else {
-        document.getElementById('withdraw-error').textContent = 'Withdraw failed or reverted.';
-        document.getElementById('withdraw-error').classList.remove('hidden');
+        if (receipt && receipt.status === 1) {
+          if (withdrawStatus) withdrawStatus.textContent = 'Withdraw successful!';
+          // Optionally redirect or show claim success
+          const contractBalance = document.getElementById('contract-balance') as HTMLElement;
+          const balanceText = contractBalance ? contractBalance.textContent?.replace('Available: ','') : '';
+          window.location.href = `/receive?claimed=1&amount=${balanceText}&address=${contractAddr}`;
+        } else {
+          if (withdrawError) {
+            withdrawError.textContent = 'Withdraw failed or reverted.';
+            withdrawError.classList.remove('hidden');
+          }
+        }
+      } catch (err: any) {
+        // Show more helpful error for invalid proof
+        if (withdrawError) {
+          if (err && err.code === 'INVALID_ARGUMENT' && /invalid arrayify value/i.test(err.message)) {
+            withdrawError.textContent = 'Withdraw failed: Invalid proof format. Please ensure your proof is a valid hex string (0x...) or base64.';
+          } else {
+            withdrawError.textContent = 'Withdraw failed: ' + (err.message || err);
+          }
+          withdrawError.classList.remove('hidden');
+        }
       }
-    } catch (err) {
-      // Show more helpful error for invalid proof
-      if (err && err.code === 'INVALID_ARGUMENT' && /invalid arrayify value/i.test(err.message)) {
-        document.getElementById('withdraw-error').textContent = 'Withdraw failed: Invalid proof format. Please ensure your proof is a valid hex string (0x...) or base64.';
-      } else {
-        document.getElementById('withdraw-error').textContent = 'Withdraw failed: ' + (err.message || err);
-      }
-      document.getElementById('withdraw-error').classList.remove('hidden');
-    }
-  };
+    };
+  }
 }); 

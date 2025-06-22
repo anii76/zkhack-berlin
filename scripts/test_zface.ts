@@ -1,10 +1,9 @@
 import hre from "hardhat";
-const { ethers } = hre;
 import ZFace from "../ignition/modules/Zface";
-import fs from "fs";
+import * as fs from "fs";
 
 async function main() {
-    const zface = await ethers.getContractFactory("ZFace");
+    const zface = await hre.ethers.getContractFactory("ZFace");
     const zfaceContract = await zface.attach("0xA2b6EBE2f95b0d5fCA020eB6F638942604dd7787")
     const tx = await zfaceContract.getAddress();
     // @ts-ignore 

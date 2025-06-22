@@ -1,13 +1,16 @@
 // TypeScript global declarations for browser globals
-// @ts-ignore
-declare const faceapi: any;
-// @ts-ignore
-interface Window { ethers: any; ethereum: any; }
+declare global {
+  const faceapi: any;
+  interface Window { ethers: any; ethereum: any; }
+}
 
-let stream;
+export {};
+
+let stream: MediaStream | undefined;
 let isModelLoaded = false;
-async function startWebcam() {
-  const videoEl = document.getElementById('inputVideo');
+async function startWebcam(): Promise<void> {
+  const videoEl = document.getElementById('inputVideo') as HTMLVideoElement;
+  if (!videoEl) return;
   try {
     // Use the front (selfie) camera by default
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
@@ -15,49 +18,63 @@ async function startWebcam() {
     // fallback to any camera
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
   }
-  videoEl.srcObject = stream;
+  if (videoEl) {
+    videoEl.srcObject = stream;
+  }
 }
-async function loadModels() {
+async function loadModels(): Promise<void> {
   await faceapi.nets.tinyFaceDetector.load('/models/');
   await faceapi.nets.faceRecognitionNet.load('/models/');
   isModelLoaded = true;
-  document.getElementById('uploadPhoto').disabled = false;
-  document.getElementById('captureBtn').disabled = false;
+  const uploadPhoto = document.getElementById('uploadPhoto') as HTMLInputElement;
+  const captureBtn = document.getElementById('captureBtn') as HTMLButtonElement;
+  if (uploadPhoto) uploadPhoto.disabled = false;
+  if (captureBtn) captureBtn.disabled = false;
 }
-async function detectFace(sourceType = 'video') {
-  const canvas = document.getElementById('overlay');
-  let input, displaySize;
+async function detectFace(sourceType: string = 'video'): Promise<any> {
+  const canvas = document.getElementById('overlay') as HTMLCanvasElement;
+  if (!canvas) return null;
+  let input: HTMLImageElement | HTMLVideoElement;
+  let displaySize: { width: number; height: number };
   if (sourceType === 'image') {
-    input = document.getElementById('inputImage');
+    input = document.getElementById('inputImage') as HTMLImageElement;
+    if (!input) return null;
     displaySize = { width: input.naturalWidth, height: input.naturalHeight };
   } else {
-    input = document.getElementById('inputVideo');
+    input = document.getElementById('inputVideo') as HTMLVideoElement;
+    if (!input) return null;
     displaySize = { width: input.videoWidth, height: input.videoHeight };
   }
   faceapi.matchDimensions(canvas, displaySize);
   const detection = await faceapi.detectSingleFace(input, new faceapi.TinyFaceDetectorOptions());
   const resizedDetections = detection ? faceapi.resizeResults(detection, displaySize) : null;
-  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
   if (resizedDetections) {
     faceapi.draw.drawDetections(canvas, resizedDetections);
   }
   return detection;
 }
 // Helper function to check if an image is loaded (from face-api.js isMediaLoaded)
-function isImageLoaded(img) {
+function isImageLoaded(img: HTMLImageElement): boolean {
   return img.complete;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   await loadModels();
   await startWebcam();
-  const inputImage = document.getElementById('inputImage');
-  const inputVideo = document.getElementById('inputVideo');
-  document.getElementById('uploadPhoto').addEventListener('change', async function (e) {
-    const file = e.target.files[0];
+  const inputImage = document.getElementById('inputImage') as HTMLImageElement;
+  const inputVideo = document.getElementById('inputVideo') as HTMLVideoElement;
+  const uploadPhoto = document.getElementById('uploadPhoto') as HTMLInputElement;
+  uploadPhoto?.addEventListener('change', async function (e: Event) {
+    const target = e.target as HTMLInputElement;
+    const file = target.files ? target.files[0] : null;
     if (!file) return;
     const url = URL.createObjectURL(file);
     inputImage.src = url;
-    inputImage.onload = async () => {
+    if (inputImage) {
+      inputImage.onload = async () => {
       inputImage.classList.remove('hidden');
       inputVideo.classList.add('hidden');
       if (!isImageLoaded(inputImage)) {
@@ -65,28 +82,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
       const detection = await detectFace('image');
-      const status = document.getElementById('face-status');
+      const status = document.getElementById('face-status') as HTMLElement;
       if (detection) {
-        status.textContent = '';
-        document.getElementById('captureBtn').style.display = 'none';
+        if (status) status.textContent = '';
+        const captureBtn = document.getElementById('captureBtn') as HTMLElement;
+        if (captureBtn) captureBtn.style.display = 'none';
         const descriptor = await faceapi.computeFaceDescriptor(inputImage);
-        const embeddingsOutput = document.getElementById('embeddings-output');
+        const embeddingsOutput = document.getElementById('embeddings-output') as HTMLTextAreaElement;
         if (embeddingsOutput) {
           embeddingsOutput.value = JSON.stringify(Array.from(descriptor), null, 2);
           // Skip embeddings-container, go directly to send funds
-          document.getElementById('embeddings-container').classList.add('hidden');
+          const embeddingsContainer = document.getElementById('embeddings-container') as HTMLElement;
+          if (embeddingsContainer) embeddingsContainer.classList.add('hidden');
           showSendFunds();
         } else {
           console.warn('Embeddings output not found in DOM');
         }
       } else {
-        status.textContent = 'No face detected in uploaded photo. Try another image.';
+        if (status) status.textContent = 'No face detected in uploaded photo. Try another image.';
         inputImage.classList.add('hidden');
         inputVideo.classList.remove('hidden');
       }
-    };
+      };
+    }
   });
-  document.getElementById('captureBtn').onclick = async () => {
+  const captureBtnElement = document.getElementById('captureBtn') as HTMLButtonElement;
+  if (captureBtnElement) {
+    captureBtnElement.onclick = async () => {
     if (!isModelLoaded) return;
     let detection;
     if (!inputImage.classList.contains('hidden')) {
@@ -94,49 +116,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       detection = await detectFace('video');
     }
-    const status = document.getElementById('face-status');
-    if (detection) {
-      status.textContent = '';
-      document.getElementById('captureBtn').style.display = 'none';
+      const status = document.getElementById('face-status') as HTMLElement;
+      if (detection) {
+        if (status) status.textContent = '';
+        const captureBtn = document.getElementById('captureBtn') as HTMLElement;
+        if (captureBtn) captureBtn.style.display = 'none';
       let descriptor;
       if (!inputImage.classList.contains('hidden')) {
         descriptor = await faceapi.computeFaceDescriptor(inputImage);
       } else {
         descriptor = await faceapi.computeFaceDescriptor(inputVideo);
       }
-      const embeddingsOutput = document.getElementById('embeddings-output');
+        const embeddingsOutput = document.getElementById('embeddings-output') as HTMLTextAreaElement;
       if (embeddingsOutput) {
         embeddingsOutput.value = JSON.stringify(Array.from(descriptor), null, 2);
         // Skip embeddings-container, go directly to send funds
-        document.getElementById('embeddings-container').classList.add('hidden');
+          const embeddingsContainer = document.getElementById('embeddings-container') as HTMLElement;
+          if (embeddingsContainer) embeddingsContainer.classList.add('hidden');
         showSendFunds();
       } else {
         console.warn('Embeddings output not found in DOM');
       }
-      if (stream && inputImage.classList.contains('hidden')) stream.getTracks().forEach(t => t.stop());
-    } else {
-      status.textContent = 'No face detected. Try again.';
-    }
-  };
+        if (stream && inputImage && inputImage.classList.contains('hidden')) {
+          stream.getTracks().forEach(t => t.stop());
+        }
+      } else {
+        if (status) status.textContent = 'No face detected. Try again.';
+      }
+    };
+  }
 });
 // --- New wallet/ETH logic ---
-let userAddress = null;
-let provider, signer;
+let scanUserAddress: string | null = null;
+let scanProvider: any;
+let scanSigner: any;
 const CHAIN_ID = '0x66eee'; // 421614 in hex
 const RPC_URL = 'https://sepolia-rollup.arbitrum.io/rpc';
 // Show send funds UI after embeddings
-function showSendFunds() {
-  document.getElementById('embeddings-container').classList.add('hidden');
-  document.getElementById('send-funds-container').classList.remove('hidden');
+function showSendFunds(): void {
+  const embeddingsContainer = document.getElementById('embeddings-container') as HTMLElement;
+  const sendFundsContainer = document.getElementById('send-funds-container') as HTMLElement;
+  if (embeddingsContainer) embeddingsContainer.classList.add('hidden');
+  if (sendFundsContainer) sendFundsContainer.classList.remove('hidden');
 }
 // Connect wallet
-document.getElementById('connect-wallet').onclick = async function () {
+const connectWalletBtn = document.getElementById('connect-wallet') as HTMLButtonElement;
+if (connectWalletBtn) {
+  connectWalletBtn.onclick = async function () {
   if (window.ethereum) {
     let switched = false;
     try {
       await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CHAIN_ID }] });
       switched = true;
-    } catch (switchError) {
+    } catch (switchError: any) {
       if (switchError.code === 4902) {
         // Chain not added, try to add
         try {
@@ -151,56 +183,84 @@ document.getElementById('connect-wallet').onclick = async function () {
             }]
           });
           switched = true;
-        } catch (addError) {
-          document.getElementById('send-error').textContent = 'Failed to add network.';
-          document.getElementById('send-error').classList.remove('hidden');
+        } catch (addError: any) {
+          const sendError = document.getElementById('send-error') as HTMLElement;
+          if (sendError) {
+            sendError.textContent = 'Failed to add network.';
+            sendError.classList.remove('hidden');
+          }
           return;
         }
       } else if (switchError.code === 4001) {
         // User rejected
-        document.getElementById('send-error').textContent = 'Network switch rejected by user.';
-        document.getElementById('send-error').classList.remove('hidden');
+        const sendError = document.getElementById('send-error') as HTMLElement;
+        if (sendError) {
+          sendError.textContent = 'Network switch rejected by user.';
+          sendError.classList.remove('hidden');
+        }
         return;
       } // else: could be already on correct network, so continue
     }
     // Always try to connect wallet and show address
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      userAddress = accounts[0];
-      document.getElementById('wallet-address').textContent = 'Connected: ' + userAddress;
-      document.getElementById('wallet-address').classList.remove('hidden');
-      document.getElementById('send-eth').disabled = false;
-      document.getElementById('send-error').classList.add('hidden');
-    } catch (connectError) {
-      document.getElementById('send-error').textContent = 'Wallet connection rejected.';
-      document.getElementById('send-error').classList.remove('hidden');
+      scanUserAddress = accounts[0];
+      const walletAddress = document.getElementById('wallet-address') as HTMLElement;
+      const sendEth = document.getElementById('send-eth') as HTMLButtonElement;
+      const sendError = document.getElementById('send-error') as HTMLElement;
+      if (walletAddress) {
+        walletAddress.textContent = 'Connected: ' + scanUserAddress;
+        walletAddress.classList.remove('hidden');
+      }
+      if (sendEth) sendEth.disabled = false;
+      if (sendError) sendError.classList.add('hidden');
+    } catch (connectError: any) {
+      const sendError = document.getElementById('send-error') as HTMLElement;
+      if (sendError) {
+        sendError.textContent = 'Wallet connection rejected.';
+        sendError.classList.remove('hidden');
+      }
     }
   } else {
-    document.getElementById('send-error').textContent = 'MetaMask not found.';
-    document.getElementById('send-error').classList.remove('hidden');
+    const sendError = document.getElementById('send-error') as HTMLElement;
+    if (sendError) {
+      sendError.textContent = 'MetaMask not found.';
+      sendError.classList.remove('hidden');
+    }
   }
-};
+  };
+}
 // Send ETH and call contract
-document.getElementById('send-eth').onclick = async function () {
-  document.getElementById('send-status').classList.add('hidden');
-  document.getElementById('send-error').classList.add('hidden');
-  const eth = parseFloat(document.getElementById('eth-amount-input').value);
-  if (!userAddress || !eth || eth <= 0) {
-    document.getElementById('send-error').textContent = 'Please connect wallet and enter a valid ETH amount.';
-    document.getElementById('send-error').classList.remove('hidden');
-    return;
-  }
-  // Get face embeddings
-  let embeddings;
-  try {
-    embeddings = JSON.parse(document.getElementById('embeddings-output').value);
-  } catch (e) {
-    document.getElementById('send-error').textContent = 'Invalid embeddings.';
-    document.getElementById('send-error').classList.remove('hidden');
-    return;
-  }
-  // Pad/convert embeddings to bytes32[128]
-  let faceEncoding = [];
+const sendEthBtn = document.getElementById('send-eth') as HTMLButtonElement;
+if (sendEthBtn) {
+  sendEthBtn.onclick = async function () {
+    const sendStatus = document.getElementById('send-status') as HTMLElement;
+    const sendError = document.getElementById('send-error') as HTMLElement;
+    if (sendStatus) sendStatus.classList.add('hidden');
+    if (sendError) sendError.classList.add('hidden');
+    const ethAmountInput = document.getElementById('eth-amount-input') as HTMLInputElement;
+    const eth = ethAmountInput ? parseFloat(ethAmountInput.value) : 0;
+    if (!scanUserAddress || !eth || eth <= 0) {
+      if (sendError) {
+        sendError.textContent = 'Please connect wallet and enter a valid ETH amount.';
+        sendError.classList.remove('hidden');
+      }
+      return;
+    }
+    // Get face embeddings
+    let embeddings: number[];
+    try {
+      const embeddingsOutput = document.getElementById('embeddings-output') as HTMLTextAreaElement;
+      embeddings = embeddingsOutput ? JSON.parse(embeddingsOutput.value) : [];
+    } catch (e: any) {
+      if (sendError) {
+        sendError.textContent = 'Invalid embeddings.';
+        sendError.classList.remove('hidden');
+      }
+      return;
+    }
+    // Pad/convert embeddings to bytes32[128]
+    let faceEncoding: string[] = [];
   for (let i = 0; i < 128; i++) {
     let hex;
     if (i < embeddings.length) {
@@ -216,9 +276,9 @@ document.getElementById('send-eth').onclick = async function () {
       faceEncoding.push('0x' + '00'.repeat(32));
     }
   }
-  // Generate a salt as bytes32
-  // Use ethers.utils.formatBytes32String to convert a string to bytes32
-  let salt;
+    // Generate a salt as bytes32
+    // Use ethers.utils.formatBytes32String to convert a string to bytes32
+    let salt: string;
   try {
     // Generate a random 16-byte hex string and format as bytes32
     // Use a 31-character string to ensure it's less than 32 bytes for formatBytes32String
@@ -226,11 +286,13 @@ document.getElementById('send-eth').onclick = async function () {
     // Convert to base64 (22 chars for 16 bytes), safe for bytes32
     const randomBase64 = btoa(String.fromCharCode(...randomBytes)).replace(/=+$/, '').slice(0, 31);
     salt = window.ethers.utils.formatBytes32String(randomBase64);
-  } catch (e) {
-    document.getElementById('send-error').textContent = 'Failed to format salt: ' + (e.message || e);
-    document.getElementById('send-error').classList.remove('hidden');
-    return;
-  }
+    } catch (e: any) {
+      if (sendError) {
+        sendError.textContent = 'Failed to format salt: ' + (e.message || e);
+        sendError.classList.remove('hidden');
+      }
+      return;
+    }
   // Contract ABI and address (replace with your deployed address)
   const CONTRACT_ABI = [
     { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "addr", "type": "address" }], "name": "Deployed", "type": "event" },
@@ -273,9 +335,9 @@ document.getElementById('send-eth').onclick = async function () {
   const CONTRACT_ADDRESS = '0x0ff86E8abc751ea988835e92123CBFCB0b906f68';
   // Use ethers.js if available
   if (window.ethereum && window.ethers) {
-    provider = new window.ethers.providers.Web3Provider(window.ethereum, 'any');
-    signer = provider.getSigner();
-    const contract = new window.ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    scanProvider = new window.ethers.providers.Web3Provider(window.ethereum, 'any');
+    scanSigner = scanProvider.getSigner();
+    const contract = new window.ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, scanSigner);
     try {
       console.log("deploying contract");
       console.log("Salt:", salt);
@@ -299,26 +361,30 @@ document.getElementById('send-eth').onclick = async function () {
         },
       );
       console.log("Transaction sent to blockchain. Tx hash:", tx.hash);
-      document.getElementById('send-status').textContent = 'Transaction sent. Waiting for confirmation...';
-      document.getElementById('send-status').classList.remove('hidden');
+      if (sendStatus) {
+        sendStatus.textContent = 'Transaction sent. Waiting for confirmation...';
+        sendStatus.classList.remove('hidden');
+      }
       const receipt = await tx.wait();
       if (receipt && receipt.status === 1) {
-        console.log("Transaction confirmed on blockchain. Receipt:", receipt);
+          console.log("Transaction confirmed on blockchain. Receipt:", receipt);
       } else {
         console.log("Transaction failed or was reverted. Receipt:", receipt);
       }
       // Get deployed address from event or call getAddress
-      let deployedAddr = null;
+      let deployedAddr: string | null = null;
       if (receipt && receipt.events) {
-        const event = receipt.events.find(e => e.event === 'Deployed');
+        const event = receipt.events.find((e: any) => e.event === 'Deployed');
         if (event) deployedAddr = event.args.addr;
       }
       if (!deployedAddr) {
         deployedAddr = await contract.getAddress(salt, "0x4f98718CE96ccAb7CEaaB5a81C7ddDAF77D8dDc8", faceEncoding);
       }
       // Show success and link
-      document.getElementById('send-funds-container').classList.add('hidden');
-      document.getElementById('claim-link-container').classList.remove('hidden');
+      const sendFundsContainer = document.getElementById('send-funds-container') as HTMLElement;
+      const claimLinkContainer = document.getElementById('claim-link-container') as HTMLElement;
+      if (sendFundsContainer) sendFundsContainer.classList.add('hidden');
+      if (claimLinkContainer) claimLinkContainer.classList.remove('hidden');
       // Encode embeddings as base64 for URL
       let embeddingsBase64 = '';
       try {
@@ -328,36 +394,57 @@ document.getElementById('send-eth').onclick = async function () {
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=+$/, ''); // URL-safe base64
-      } catch (e) {
+      } catch (e: any) {
         embeddingsBase64 = '';
       }
       const claimUrl = `${window.location.origin}/receive?address=${deployedAddr}&amount=${eth}ETH&embeddings=${embeddingsBase64}`;
-      document.getElementById('claim-link').value = claimUrl;
-      document.getElementById('copy-link').onclick = function () {
-        navigator.clipboard.writeText(claimUrl);
-        document.getElementById('copy-status').classList.remove('hidden');
-        setTimeout(() => document.getElementById('copy-status').classList.add('hidden'), 1200);
-      };
-    } catch (err) {
+      const claimLink = document.getElementById('claim-link') as HTMLInputElement;
+      const copyLink = document.getElementById('copy-link') as HTMLButtonElement;
+      if (claimLink) claimLink.value = claimUrl;
+      if (copyLink) {
+        copyLink.onclick = function () {
+          navigator.clipboard.writeText(claimUrl);
+          const copyStatus = document.getElementById('copy-status') as HTMLElement;
+          if (copyStatus) {
+            copyStatus.classList.remove('hidden');
+            setTimeout(() => copyStatus.classList.add('hidden'), 1200);
+          }
+        };
+      }
+    } catch (err: any) {
       console.error("Transaction failed to send to blockchain:", err);
-      document.getElementById('send-error').textContent = 'Transaction failed: ' + (err.message || err);
-      document.getElementById('send-error').classList.remove('hidden');
+      if (sendError) {
+        sendError.textContent = 'Transaction failed: ' + (err.message || err);
+        sendError.classList.remove('hidden');
+      }
     }
   } else {
     console.error("Ethers.js or MetaMask not found.");
-    document.getElementById('send-error').textContent = 'Ethers.js or MetaMask not found.';
-    document.getElementById('send-error').classList.remove('hidden');
+    if (sendError) {
+      sendError.textContent = 'Ethers.js or MetaMask not found.';
+      sendError.classList.remove('hidden');
+    }
   }
-};
+  };
+}
 // Enable/disable send button based on ETH input
-document.getElementById('eth-amount-input').addEventListener('input', function () {
-  const eth = parseFloat(this.value);
-  document.getElementById('send-eth').disabled = !(eth > 0 && userAddress);
-});
+const ethAmountInputElement = document.getElementById('eth-amount-input') as HTMLInputElement;
+if (ethAmountInputElement) {
+  ethAmountInputElement.addEventListener('input', function () {
+    const eth = parseFloat(this.value);
+    const sendEthButton = document.getElementById('send-eth') as HTMLButtonElement;
+    if (sendEthButton) {
+      sendEthButton.disabled = !(eth > 0 && scanUserAddress);
+    }
+  });
+}
 // Show send funds UI after embeddings are generated
 // Patch into existing embedding logic
-const origShowEmbeddings = function () {
-  document.getElementById('embeddings-container').classList.remove('hidden');
+const origShowEmbeddings = function (): void {
+  const embeddingsContainer = document.getElementById('embeddings-container') as HTMLElement;
+  if (embeddingsContainer) {
+    embeddingsContainer.classList.remove('hidden');
+  }
   showSendFunds();
 };
 // Patch: after embeddings are shown, also show send funds

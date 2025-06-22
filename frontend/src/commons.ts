@@ -1,4 +1,17 @@
-async function requestExternalImage(imageUrl) {
+// TypeScript type declarations
+declare global {
+  const faceapi: any;
+  const $: any;
+}
+
+export {};
+
+interface ExampleItem {
+  uri: string;
+  name: string;
+}
+
+async function requestExternalImage(imageUrl: string): Promise<HTMLImageElement> {
   const res = await fetch('fetch_external_image', {
     method: 'post',
     headers: {
@@ -15,15 +28,15 @@ async function requestExternalImage(imageUrl) {
   try {
     blob = await res.blob()
     return await faceapi.bufferToImage(blob)
-  } catch (e) {
+  } catch (e: any) {
     console.error('received blob:', blob)
     console.error('error:', e)
     throw new Error('failed to load image from url: ' + imageUrl)
   }
 }
 
-function renderNavBar(navbarId, exampleUri) {
-  const examples = [
+function renderNavBar(navbarId: string, exampleUri: string): void {
+  const examples: ExampleItem[] = [
     {
       uri: 'face_detection',
       name: 'Face Detection'
@@ -94,11 +107,12 @@ function renderNavBar(navbarId, exampleUri) {
     }
   ]
 
-  const navbar = $(navbarId).get(0)
-  const pageContainer = $('.page-container').get(0)
+  const navbar = $(navbarId).get(0) as HTMLElement
+  const pageContainer = $('.page-container').get(0) as HTMLElement
 
   const header = document.createElement('h3')
-  header.innerHTML = examples.find(ex => ex.uri === exampleUri).name
+  const foundExample = examples.find(ex => ex.uri === exampleUri);
+  header.innerHTML = foundExample ? foundExample.name : 'Unknown Example'
   pageContainer.insertBefore(header, pageContainer.children[0])
 
   const menuContent = document.createElement('ul')
@@ -151,16 +165,19 @@ function renderNavBar(navbarId, exampleUri) {
   })
 }
 
-function renderSelectList(selectListId, onChange, initialValue, renderChildren) {
+function renderSelectList(selectListId: string, onChange: (value: string) => void, initialValue: string, renderChildren: (select: HTMLSelectElement) => void): void {
   const select = document.createElement('select')
-  $(selectListId).get(0).appendChild(select)
+  const container = $(selectListId).get(0) as HTMLElement;
+  if (container) {
+    container.appendChild(select);
+  }
   renderChildren(select)
   $(select).val(initialValue)
-  $(select).on('change', (e) => onChange(e.target.value))
+  $(select).on('change', (e: any) => onChange((e.target as HTMLSelectElement).value))
   $(select).material_select()
 }
 
-function renderOption(parent, text, value) {
+function renderOption(parent: HTMLElement, text: string, value: string): void {
   const option = document.createElement('option')
   option.innerHTML = text
   option.value = value

@@ -1,4 +1,4 @@
-import pako from 'pako';
+import * as pako from 'pako';
 import { AES, enc } from 'crypto-js';
 import base64url from 'base64url';
 
