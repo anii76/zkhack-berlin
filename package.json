@@ -6,11 +6,12 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
-    "test:backend": "cd backend && npm test",
-    "start:frontend": "cd frontend && npm start",
-    "start:frontend:ts": "cd frontend && npm run start:ts",
+    "start:frontend": "cd frontend && ts-node server.ts",
+    "start:frontend:js": "cd frontend && node server.js", 
     "build": "tsc --noEmitOnError false",
-    "build:frontend": "cd frontend && npm run build"
+    "build:frontend": "cd frontend && tsc --noEmitOnError false",
+    "generate-proof": "ts-node scripts/generate_proof.ts",
+    "test-zface": "ts-node scripts/test_zface.ts"
   },
   "keywords": ["zk", "face-verification", "blockchain", "noir"],
   "author": "Bruno Eleodoro Roza",
