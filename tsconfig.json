@@ -10,10 +10,12 @@
     "noEmitOnError": false,
     "baseUrl": "./",
     "paths": {
-      "@backend/*": ["backend/*"],
+      "@src/*": ["src/*"],
+      "@scripts/*": ["scripts/*"],
+      "@contracts/*": ["contracts/*"],
       "@frontend/*": ["frontend/*"]
     }
   },
-  "include": ["backend/**/*", "frontend/src/**/*"],
-  "exclude": ["node_modules", "dist", "frontend/ignore"]
+  "include": ["src/**/*", "scripts/**/*", "test/**/*", "ignition/**/*", "frontend/src/**/*"],
+  "exclude": ["node_modules", "dist", "frontend/ignore", "artifacts", "cache"]
 }
