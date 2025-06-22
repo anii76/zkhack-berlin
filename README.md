@@ -92,23 +92,6 @@ ZFace Cash is built with cutting-edge zero-knowledge technology:
 
 The system leverages advanced cryptographic techniques to ensure that users can prove their identity without compromising their privacy or security.
 
-<!-- Color Reference -->
-### Color Reference
-
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
-
-
-<!-- Env Variables -->
-### Environment Variables
-
-To run this project, you will need to add the following environment variables 
-
-
 <!-- Getting Started -->
 ## Getting Started
 
