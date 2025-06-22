@@ -1,3 +1,38 @@
+target/
+
+# Foundry build artifacts
+out/
+cache/
+artifacts/
+broadcast/
+gas-snapshots/
+logs/
+
+# Node dependencies (if using JavaScript tooling)
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+node_modules
+.env
+
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+deployments/
 node_modules
 .env
 

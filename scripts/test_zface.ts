@@ -7,8 +7,8 @@ async function main() {
     const tx = await zfaceContract.getAddress();
     // @ts-ignore 
     // salt, verifier address, face encoding
-    const faceEncoding = Array(128).fill("0x0000000000000000000000000000000000000000000000000000000000000000");
-    const g = await zfaceContract.withdraw();
+    const proof = Array(128).fill("0x0000000000000000000000000000000000000000000000000000000000000000");
+    const g = await zfaceContract.withdraw("0x9473EC0057AcBBa6b6E1d6af50d14C6343C0817A");
     console.log("ZFace deployed at", g);
     console.log("ZFace deployed at", tx);
 }

@@ -15,7 +15,19 @@ const config: HardhatUserConfig = {
     arbitrumSepolia: {
       url: "https://sepolia-rollup.arbitrum.io/rpc",
       accounts: [""]
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545"
+    },
+    hardhat: {
+      chainId: 31337
     }
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
   },
   etherscan: {
     // Your API key for Etherscan _
