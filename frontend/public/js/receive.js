@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('startFaceScanBtn').style.display = 'none';
             return;
         }
+        const embeddings = params.embeddings;
+        console.log(embeddings);
         // --- Withdraw UI logic ---
         const contractAddr = params.address;
         if (contractAddr) {
