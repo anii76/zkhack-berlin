@@ -20,6 +20,7 @@ app.get('/receive', (req: Request, res: Response) => res.sendFile(path.join(view
 app.get('/face-scan', (req: Request, res: Response) => res.sendFile(path.join(viewsDir, 'face-scan.html')));
 app.get('/success', (req: Request, res: Response) => res.sendFile(path.join(viewsDir, 'success.html')));
 
+
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 

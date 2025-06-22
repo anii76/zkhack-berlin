@@ -41,6 +41,9 @@
       </div>
     </div>
     <script src="/face-api.js"></script>
+    <script src="/js/quantize.js"></script>
+    <script src="/js/threshold.js"></script>
+    <script src="/js/faceProver.js"></script>
     <script>
       let stream;
       let isModelLoaded = false;
@@ -100,24 +103,8 @@
         }
       }
 
-      // Calculate similarity between two embedding vectors
-      function calculateSimilarity(embedding1, embedding2) {
-        if (!embedding1 || !embedding2 || embedding1.length !== embedding2.length) {
-          return 0;
-        }
-        
-        let dot = 0;
-        let norm1 = 0;
-        let norm2 = 0;
-        
-        for (let i = 0; i < embedding1.length; i++) {
-          dot += embedding1[i] * embedding2[i];
-          norm1 += embedding1[i] * embedding1[i];
-          norm2 += embedding2[i] * embedding2[i];
-        }
-        
-        return dot / (Math.sqrt(norm1) * Math.sqrt(norm2));
-      }
+      // Use the imported THRESHOLD from threshold.js
+      const FACE_THRESHOLD = window.threshold_1?.THRESHOLD || 500000000;
 
       document.addEventListener('DOMContentLoaded', async function() {
         const referenceEmbeddings = getReferenceEmbeddings();
@@ -143,38 +130,47 @@
             document.getElementById('scan-loading').classList.add('hidden');
             
             if (detection) {
-              // Compute face descriptor for current scan
-              const videoEl = document.getElementById('inputVideo');
-              const currentEmbeddings = await faceapi.computeFaceDescriptor(videoEl);
-              
-              // Compare with reference embeddings
-              const similarity = calculateSimilarity(Array.from(currentEmbeddings), referenceEmbeddings);
-              console.log('Face similarity:', similarity);
-              
-              // Threshold for face match (adjust as needed)
-              const threshold = 0.6;
-              
-              if (similarity >= threshold) {
-                if (stream) stream.getTracks().forEach(t => t.stop());
-                // Redirect back to receive page with proof
-                // For now, use a simple proof (in a real implementation, this would generate a ZK proof)
-                const proof = btoa(JSON.stringify({
-                  similarity: similarity,
-                  timestamp: Date.now(),
-                  referenceHash: btoa(JSON.stringify(referenceEmbeddings)).slice(0, 32)
-                }));
+              try {
+                // Compute face descriptor for current scan
+                const videoEl = document.getElementById('inputVideo');
+                const currentEmbeddings = await faceapi.computeFaceDescriptor(videoEl);
                 
+                console.log('Generating ZK proof for face verification...');
+                
+                // Quantize the face embeddings
+                const quantizedReference = referenceEmbeddings.map(value => window.quantize_1.quantize(value));
+                const quantizedProbe = Array.from(currentEmbeddings).map(value => window.quantize_1.quantize(value));
+                
+                // Generate ZK proof using faceProver
+                const proofResult = await window.faceProver_1.faceProver(
+                  quantizedReference, 
+                  quantizedProbe,
+                  Number(FACE_THRESHOLD)
+                );
+                
+                // Convert proof to hex string
+                const proofHex = '0x' + Array.from(proofResult.proof)
+                  .map(byte => byte.toString(16).padStart(2, '0'))
+                  .join('');
+                
+                console.log('ZK proof generated successfully');
+                
+                if (stream) stream.getTracks().forEach(t => t.stop());
+                
+                // Redirect back to receive page with the ZK proof
                 const redirectUrl = `/receive?${new URLSearchParams({
                   ...params,
-                  proof: proof,
+                  proof: proofHex,
                   verified: '1'
                 }).toString()}`;
                 
                 window.location.href = redirectUrl;
-              } else {
+                
+              } catch (error) {
+                console.error('Face verification failed:', error);
                 this.disabled = false;
                 this.innerHTML = '<span class="truncate">Scan Face</span>';
-                alert(`Face verification failed. Similarity: ${similarity.toFixed(3)}, required: ${threshold}. Please try again.`);
+                alert('Face verification failed. This may indicate the faces do not match or there was an error generating the proof. Please try again.');
               }
             } else {
               this.disabled = false;
