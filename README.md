@@ -31,3 +31,8 @@ Then, run `npm run test` to run the tests.
 ## Deployment
 
 Noir integrates with Solidity, so you can deploy your Solidity contracts like in any other Solidity project using the official [Hardhat Ignition](https://hardhat.org/ignition/docs/getting-started) or community maintained [Hardhat Deploy](https://github.com/wighawag/hardhat-deploy).
+
+
+Extra Thanks to for inspiration and some hints at directions:
+https://github.com/olehmisar/hardhat-noir-starter
+https://github.com/ewynx/zkFace

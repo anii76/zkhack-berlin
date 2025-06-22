@@ -2,6 +2,8 @@
 name = "my_noir"
 type = "bin"
 authors = [""]
-compiler_version = ">=0.35.0"
+compiler_version = "0.39.0"
 
 [dependencies]
+quantized = { tag = "v0.1.3", git = "https://github.com/hashcloak/noir-fixed-point" }
+
