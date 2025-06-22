@@ -26,6 +26,17 @@
               Start Face Scan
             </a>
           </div>
+          <script>
+            // Update face scan link to preserve URL parameters
+            document.addEventListener('DOMContentLoaded', function() {
+              const startFaceScanBtn = document.getElementById('startFaceScanBtn');
+              if (startFaceScanBtn && window.location.search) {
+                const currentUrl = new URL(startFaceScanBtn.href, window.location.origin);
+                currentUrl.search = window.location.search;
+                startFaceScanBtn.href = currentUrl.toString();
+              }
+            });
+          </script>
           <div id="claim-success" class="hidden flex flex-col items-center justify-center py-6 px-2 text-center">
             <div class="text-green-400 text-xl font-bold mb-2">🎉 Success!</div>
             <div class="text-white text-base font-normal mb-2">You have claimed your funds.</div>

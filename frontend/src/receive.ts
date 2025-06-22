@@ -73,6 +73,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (startFaceScanBtn) {
       startFaceScanBtn.style.display = 'none';
     }
+    // Show success message
+    const verificationSuccess = document.createElement('div');
+    verificationSuccess.className = 'text-green-400 text-center mb-4';
+    verificationSuccess.innerHTML = '✅ Face verification successful! Proof has been generated.';
+    const faceScanContainer = startFaceScanBtn.parentElement;
+    if (faceScanContainer) {
+      faceScanContainer.appendChild(verificationSuccess);
+    }
   }
   let referenceEmbeddings: number[] | null = null;
   if (params.embeddings) {
@@ -93,15 +101,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   }
 
-  // Update face scan link to include embeddings
-  if (params.embeddings) {
-    const startFaceScanBtn = document.getElementById('startFaceScanBtn') as HTMLAnchorElement;
-    if (startFaceScanBtn) {
-      const currentUrl = new URL(startFaceScanBtn.href, window.location.origin);
-      const searchParams = new URLSearchParams(window.location.search);
-      currentUrl.search = searchParams.toString();
-      startFaceScanBtn.href = currentUrl.toString();
-    }
+  // Update face scan link to include ALL URL parameters (embeddings, address, etc.)
+  const startFaceScanBtn = document.getElementById('startFaceScanBtn') as HTMLAnchorElement;
+  if (startFaceScanBtn) {
+    const currentUrl = new URL(startFaceScanBtn.href, window.location.origin);
+    const searchParams = new URLSearchParams(window.location.search);
+    currentUrl.search = searchParams.toString();
+    startFaceScanBtn.href = currentUrl.toString();
   }
 
   // --- Withdraw UI logic ---
