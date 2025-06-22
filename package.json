@@ -1,8 +1,45 @@
 {
+  "name": "zface-cash",
+  "version": "0.0.1",
+  "description": "ZFace Cash - Zero-knowledge face verification system",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "test:backend": "cd backend && npm test",
+    "start:frontend": "cd frontend && npm start",
+    "start:frontend:ts": "cd frontend && npm run start:ts",
+    "build": "tsc --noEmitOnError false",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "keywords": ["zk", "face-verification", "blockchain", "noir"],
+  "author": "Bruno Eleodoro Roza",
+  "license": "ISC",
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "crypto-js": "^4.2.0",
+    "pako": "^2.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "request": "^2.88.2",
+    "ts-node": "^10.9.2"
+  },
   "devDependencies": {
+    "@aztec/bb.js": "0.85.0",
+    "@noir-lang/noir_js": "0.39.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/pako": "^2.0.3",
     "@types/express": "^5.0.3",
+    "@types/jquery": "^3.5.32",
     "@types/node": "^24.0.3",
     "@types/request": "^2.48.12",
+    "ethers": "^6.14.4",
+    "hardhat": "^2.22.14",
+    "hardhat-noir": "^0.5.0",
+    "typechain": "^8.3.2",
     "typescript": "^5.8.3"
   }
 }
