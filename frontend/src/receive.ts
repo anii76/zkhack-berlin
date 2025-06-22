@@ -61,8 +61,49 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (startBtn2) startBtn2.style.display = 'none';
     return;
   }
-  const embeddings = params.embeddings;
-  console.log(embeddings);
+
+  // --- Auto-populate proof if verified from face scan ---
+  if (params.verified === '1' && params.proof) {
+    const proofInput = document.getElementById('proof-input') as HTMLInputElement;
+    if (proofInput) {
+      proofInput.value = params.proof;
+    }
+    // Hide the face scan button since verification is complete
+    const startFaceScanBtn = document.getElementById('startFaceScanBtn') as HTMLElement;
+    if (startFaceScanBtn) {
+      startFaceScanBtn.style.display = 'none';
+    }
+  }
+  let referenceEmbeddings: number[] | null = null;
+  if (params.embeddings) {
+    try {
+      // Decode URL-safe base64 back to regular base64
+      const regularBase64 = params.embeddings
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+      // Add padding if needed
+      const paddedBase64 = regularBase64 + '='.repeat((4 - regularBase64.length % 4) % 4);
+      // Decode base64 to string then parse JSON
+      const embeddingsStr = decodeURIComponent(escape(atob(paddedBase64)));
+      referenceEmbeddings = JSON.parse(embeddingsStr);
+      console.log('Decoded reference embeddings:', referenceEmbeddings);
+    } catch (e) {
+      console.warn('Failed to decode reference embeddings from URL:', e);
+      referenceEmbeddings = null;
+    }
+  }
+
+  // Update face scan link to include embeddings
+  if (params.embeddings) {
+    const startFaceScanBtn = document.getElementById('startFaceScanBtn') as HTMLAnchorElement;
+    if (startFaceScanBtn) {
+      const currentUrl = new URL(startFaceScanBtn.href, window.location.origin);
+      const searchParams = new URLSearchParams(window.location.search);
+      currentUrl.search = searchParams.toString();
+      startFaceScanBtn.href = currentUrl.toString();
+    }
+  }
+
   // --- Withdraw UI logic ---
   const contractAddr = params.address;
   if (contractAddr) {
