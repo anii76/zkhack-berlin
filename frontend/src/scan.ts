@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // --- New wallet/ETH logic ---
 let userAddress = null;
 let provider, signer;
-const CHAIN_ID = '0x6706e'; // 421614 in hex
+const CHAIN_ID = '0x66eee'; // 421614 in hex
 const RPC_URL = 'https://sepolia-rollup.arbitrum.io/rpc';
 // Show send funds UI after embeddings
 function showSendFunds() {
