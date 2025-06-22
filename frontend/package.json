@@ -19,7 +19,9 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "@types/jquery": "^3.5.32",
-    "@types/node": "^24.0.3"
+    "@types/node": "^24.0.3",
+    "@types/request": "^2.48.12"
   }
 }
