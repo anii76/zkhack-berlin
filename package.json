@@ -42,5 +42,7 @@
     "hardhat-noir": "^0.5.0",
     "typechain": "^8.3.2",
     "typescript": "^5.8.3"
-  }
+  },
+  "name": "zFace.cash",
+  "description": "zFace.cash monorepo"
 }

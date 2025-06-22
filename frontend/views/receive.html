@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
     <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" />
-    <title>Receive Funds - ZK FacePay</title>
+    <title>Receive Funds - zFace.cash</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -32,18 +32,21 @@
             <div id="claim-details" class="text-white text-sm font-mono"></div>
           </div>
           <div class="flex w-full mb-4">
-            <button id="connect-wallet" class="w-full rounded-lg h-12 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold">Connect Wallet</button>
+            <button id="connect-wallet" class="w-full mt-4 rounded-lg h-12 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold">Connect Wallet</button>
           </div>
           <div id="wallet-address" class="text-slate-300 text-xs mb-2 hidden"></div>
           <div id="contract-address" class="text-slate-300 text-xs mb-2 hidden"></div>
           <div id="contract-balance" class="text-slate-300 text-xs mb-4 hidden"></div>
-          <div class="flex flex-col gap-2 w-full max-w-xs mb-4">
-            <label class="text-slate-200 text-sm">Destination Address</label>
-            <input id="dest-address" type="text" class="rounded px-2 py-1 w-full" placeholder="Enter destination address" />
-          </div>
-          <div class="flex flex-col gap-2 w-full max-w-xs mb-4">
-            <label class="text-slate-200 text-sm">Proof (hex or base64)</label>
-            <input id="proof-input" type="text" class="rounded px-2 py-1 w-full" placeholder="Paste proof here (TODO: integrate face scan)" />
+          <!-- Unified design for destination address and proof input -->
+          <div class="flex flex-col gap-4 w-full mb-4">
+            <div class="flex flex-col gap-2">
+              <label for="dest-address" class="w-full text-slate-200 text-sm font-medium">Destination Address</label>
+              <input id="dest-address" type="text" class="rounded-lg px-3 py-2 w-full bg-white/20 border border-white/30 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition" placeholder="Enter destination address" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="proof-input" class="w-full text-slate-200 text-sm font-medium">Proof <span class="text-xs text-slate-400">(hex or base64)</span></label>
+              <input id="proof-input" type="text" class="rounded-lg px-3 py-2 w-full bg-white/20 border border-white/30 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" placeholder="Paste proof here (TODO: integrate face scan)" />
+            </div>
           </div>
           <button id="withdraw-btn" class="w-full rounded-lg h-12 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold" disabled>Withdraw</button>
           <div id="withdraw-status" class="text-xs text-green-400 mt-2 hidden"></div>
