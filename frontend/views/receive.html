@@ -7,6 +7,8 @@
     <title>Receive Funds - ZK FacePay</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="/js/receive.js"></script>
   </head>
   <body>
     <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4" style='font-family: Inter, "Noto Sans", sans-serif;'>
@@ -29,29 +31,25 @@
             <div class="text-white text-base font-normal mb-2">You have claimed your funds.</div>
             <div id="claim-details" class="text-white text-sm font-mono"></div>
           </div>
+          <div class="flex w-full mb-4">
+            <button id="connect-wallet" class="w-full rounded-lg h-12 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold">Connect Wallet</button>
+          </div>
+          <div id="wallet-address" class="text-slate-300 text-xs mb-2 hidden"></div>
+          <div id="contract-address" class="text-slate-300 text-xs mb-2 hidden"></div>
+          <div id="contract-balance" class="text-slate-300 text-xs mb-4 hidden"></div>
+          <div class="flex flex-col gap-2 w-full max-w-xs mb-4">
+            <label class="text-slate-200 text-sm">Destination Address</label>
+            <input id="dest-address" type="text" class="rounded px-2 py-1 w-full" placeholder="Enter destination address" />
+          </div>
+          <div class="flex flex-col gap-2 w-full max-w-xs mb-4">
+            <label class="text-slate-200 text-sm">Proof (hex or base64)</label>
+            <input id="proof-input" type="text" class="rounded px-2 py-1 w-full" placeholder="Paste proof here (TODO: integrate face scan)" />
+          </div>
+          <button id="withdraw-btn" class="w-full rounded-lg h-12 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold" disabled>Withdraw</button>
+          <div id="withdraw-status" class="text-xs text-green-400 mt-2 hidden"></div>
+          <div id="withdraw-error" class="text-xs text-red-400 mt-2 hidden"></div>
         </div>
       </div>
     </div>
-    <script>
-      // Show claim success if ?claimed=1&amount=...&address=... in URL
-      function getQueryParams() {
-        const params = {};
-        window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k, v) {
-          params[k] = decodeURIComponent(v);
-        });
-        return params;
-      }
-      document.addEventListener('DOMContentLoaded', function() {
-        const params = getQueryParams();
-        if (params.claimed === '1') {
-          document.getElementById('claim-success').classList.remove('hidden');
-          let details = '';
-          if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
-          if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
-          document.getElementById('claim-details').innerHTML = details;
-          document.getElementById('startFaceScanBtn').style.display = 'none';
-        }
-      });
-    </script>
   </body>
 </html> 
