@@ -319,7 +319,19 @@ document.getElementById('send-eth').onclick = async function () {
       // Show success and link
       document.getElementById('send-funds-container').classList.add('hidden');
       document.getElementById('claim-link-container').classList.remove('hidden');
-      const claimUrl = `${window.location.origin}/receive?address=${deployedAddr}&amount=${eth}ETH`;
+      // Encode embeddings as base64 for URL
+      let embeddingsBase64 = '';
+      try {
+        const embeddingsStr = JSON.stringify(embeddings);
+        // Standard base64 encoding
+        embeddingsBase64 = btoa(unescape(encodeURIComponent(embeddingsStr)))
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/, ''); // URL-safe base64
+      } catch (e) {
+        embeddingsBase64 = '';
+      }
+      const claimUrl = `${window.location.origin}/receive?address=${deployedAddr}&amount=${eth}ETH&embeddings=${embeddingsBase64}`;
       document.getElementById('claim-link').value = claimUrl;
       document.getElementById('copy-link').onclick = function () {
         navigator.clipboard.writeText(claimUrl);

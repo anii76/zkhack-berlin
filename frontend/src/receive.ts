@@ -2,6 +2,7 @@
 // @ts-ignore
 interface Window { ethers: any; ethereum: any; }
 
+
 // Extracted from receive.html <script>
 // Show claim success if ?claimed=1&amount=...&address=... in URL
 function getQueryParams() {
@@ -52,6 +53,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('startFaceScanBtn').style.display = 'none';
     return;
   }
+  const embeddings = params.embeddings;
+  console.log(embeddings);
   // --- Withdraw UI logic ---
   const contractAddr = params.address;
   if (contractAddr) {
