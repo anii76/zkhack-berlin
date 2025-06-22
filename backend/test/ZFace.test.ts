@@ -472,9 +472,9 @@ it("has correct face embeddings", () => {
   const ssdA1B = sumSquaredDifferences(faceA1, faceB);
   const ssdA2B = sumSquaredDifferences(faceA2, faceB);
   console.debug({ ssdA1A2, ssdA1B, ssdA2B, threshold });
-  expect(ssdA1A2).to.be.lessThan(threshold);
-  expect(ssdA1B).to.be.greaterThan(threshold);
-  expect(ssdA2B).to.be.greaterThan(threshold);
+  expect(Number(ssdA1A2)).to.be.lessThan(Number(threshold));
+  expect(Number(ssdA1B)).to.be.greaterThan(Number(threshold));
+  expect(Number(ssdA2B)).to.be.greaterThan(Number(threshold));
 })
 
 it("proves and verifies on-chain", async () => {
@@ -538,9 +538,15 @@ it("fails verification with different faces", async () => {
   const quantizedFaceB = faceB.map(v => ({ x: v.toString() }));
   
   // This should fail in the circuit execution because sum of squared differences > threshold
-  await expect(noir.execute({ 
-    probeFace: quantizedFaceB, 
-    referenceFace: quantizedFaceA,
-    threshold: 10 // Low threshold to ensure failure
-  })).to.be.rejected;
+  let failed = false;
+  try {
+    await noir.execute({ 
+      probeFace: quantizedFaceB, 
+      referenceFace: quantizedFaceA,
+      threshold: 10 // Low threshold to ensure failure
+    });
+  } catch (e) {
+    failed = true;
+  }
+  expect(failed).to.be.true;
 });
