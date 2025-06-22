@@ -40,14 +40,5 @@ nargo compile
 nargo execute
 
 # Generate proof with Barretenberg
-bb prove -b ./target/zface_cash.json -w ./target/witness.gz -o ./proofs/proof
+bb prove -b ./target/zFace.cash.json -w ./target/witness.gz -o ./proofs/proof
 ```
-
-### 2. Deploy contracts
-- Deploy `contracts/Verifier.sol`
-- Deploy `contracts/ArrayVerifierEntry.sol` with the Verifier address
-
-### 3. Verify on-chain
-Call `verifyArraysMatch(proof)` on the ArrayVerifierEntry contract.
-
-The function will return `true` if the proof is valid and the arrays match.

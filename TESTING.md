@@ -13,7 +13,7 @@
    nargo execute
    
    # Generate proof with bb
-   bb prove -b ./target/zface_cash.json -w ./target/witness.gz -o ./proofs/proof
+   bb prove -b ./target/zFace.cash.json -w ./target/witness.gz -o ./proofs/proof
    ```
 
 2. **Deploy contracts locally:**
