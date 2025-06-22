@@ -92,6 +92,27 @@ ZFace Cash is built with cutting-edge zero-knowledge technology:
 
 The system leverages advanced cryptographic techniques to ensure that users can prove their identity without compromising their privacy or security.
 
+### How does it work
+#### 📲 On the Sender’s Phone:
+
+1. Take a photo
+2. Run a facial recognition model (e.g. [FaceAPI](http://justadudewhohacks.github.io/face-api.js/docs/index.html)) → get embedding
+3. Derive one-time address (e.g. via hash of `(embedding + salt)`)
+5. Send funds to that one-time address
+
+#### 👤 On the Receiver’s App:
+
+1. App runs the same model on selfie
+2. Embedding matches → Calculates a proof of identity compared to the sender picture
+3. Claims funds from one-time wallet → forwards to their real wallet
+4. The one-time wallet is “emptied” and marked as burned
+
+## ✨ Real Use Cases
+
+- **Events**: Send POAPs/tokens by scanning people, even if they don’t have wallets
+- **Street artists / musicians**: Let people tip others without needing contact
+- **Allow and onboard more people onchain**
+
 <!-- Getting Started -->
 ## Getting Started
 
