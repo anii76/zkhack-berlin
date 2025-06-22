@@ -1,6 +1,7 @@
-import fs from "fs";
+import * as fs from "fs";
 import { expect } from "chai";
-import hre, { ethers } from "hardhat";
+import hre from "hardhat";
+const { ethers } = hre;
 import { HonkVerifier } from "../typechain-types";
 import { BytesLike } from "ethers";
 import { quantize, quantizedToBytes32 } from "../src/quantize";

@@ -1,4 +1,5 @@
-import { ethers } from "hardhat";
+import hre from "hardhat";
+const { ethers } = hre;
 import Deployer from "../ignition/modules/Deployer";
 
 async function main() {

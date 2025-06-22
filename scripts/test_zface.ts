@@ -1,4 +1,5 @@
-import { ethers } from "hardhat";
+import hre from "hardhat";
+const { ethers } = hre;
 import ZFace from "../ignition/modules/Zface";
 import fs from "fs";
 

@@ -33,6 +33,7 @@
   "devDependencies": {
     "@aztec/bb.js": "0.85.0",
     "@noir-lang/noir_js": "0.39.0",
+    "@nomicfoundation/hardhat-ignition": "^0.15.11",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",

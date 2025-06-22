@@ -11,7 +11,7 @@ const StarterModule = buildModule("ZFace", (m) => {
   // Convert threshold to bytes32 format using ethers.js
   const threshold = ethers.zeroPadValue(ethers.toBeHex(500000000), 32);
   
-  const zface = m.contract("ZFace", [verifier, faceEncoding, threshold], { value: 1000000000000000n, // 0.001 ETH in wei
+  const zface = m.contract("ZFace", [verifier, faceEncoding, threshold], { value: BigInt("1000000000000000"), // 0.001 ETH in wei
    });
 
   return { zface, verifier };
