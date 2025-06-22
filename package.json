@@ -8,7 +8,7 @@
     "test": "npx hardhat test",
     "start:frontend": "cd frontend && ts-node server.ts",
     "start:frontend:js": "cd frontend && node server.js",
-    "build": "tsc --noEmitOnError false",
+    "build": "pnpm compile && tsc --noEmitOnError false",
     "build:frontend": "cd frontend && tsc --noEmitOnError false",
     "generate-proof": "ts-node scripts/generate_proof.ts",
     "test-zface": "ts-node scripts/test_zface.ts"
