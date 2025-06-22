@@ -120,6 +120,7 @@ Install my-project with pnpm
 To run tests, run the following command
 
 ```bash
+  npx hardhat compile
   npx hardhat test
 ```
 
@@ -140,17 +141,6 @@ Setup the network to deploy into in `hardhat.config.ts`.
   npx hardhat ignition deploy ignition/modules/ZFace.ts --network arbitrumSepolia --verify --deployment-id testnet-deployment-2
 ```
 
-Install dependencies
-
-```bash
-  yarn install
-```
-
-Start the server
-
-```bash
-  yarn start
-```
 
 <!-- Roadmap -->
 ## Roadmap
