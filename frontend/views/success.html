@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" />
+    <title>Success - ZK FacePay</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="w-full max-w-md">
+        <button onclick="window.location.href='/'" class="flex items-center text-white mb-4 gap-2 hover:text-purple-300 transition-colors" style="background: none; border: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+          Back
+        </button>
+        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center">
+          <div class="text-green-400 text-5xl mb-4">🎉</div>
+          <div class="text-green-300 text-2xl font-bold mb-2">Success!</div>
+          <div class="text-white text-base font-normal mb-4 text-center">You have claimed your funds.</div>
+          <div id="claim-details" class="text-white text-sm font-mono text-center"></div>
+          <a href="/" class="mt-8 inline-block bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded px-6 py-2 font-bold">Back to Home</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Show claim details if ?amount=...&address=... in URL
+      function getQueryParams() {
+        const params = {};
+        window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k, v) {
+          params[k] = decodeURIComponent(v);
+        });
+        return params;
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        const params = getQueryParams();
+        let details = '';
+        if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
+        if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
+        document.getElementById('claim-details').innerHTML = details;
+      });
+    </script>
+  </body>
+</html> 
