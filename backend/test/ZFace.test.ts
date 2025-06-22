@@ -502,6 +502,8 @@ it("proves and verifies on-chain", async () => {
     keccak: true,
   });
   console.debug({ proof });
+  fs.writeFileSync("proof", Buffer.from(proof).toString("hex"));
+  fs.writeFileSync("publicInputs", publicInputs.toString());
   
   // Verify that public inputs match (reference face + threshold)
   expect(publicInputs.length).to.eq(129);
