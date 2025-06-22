@@ -423,7 +423,8 @@ fs.writeFileSync("noir/zface_verifier/Prover.toml", proverToml);
 
 let verifierContract: HonkVerifier;
 before(async () => {
-  verifierContract = await ethers.deployContract("HonkVerifier");
+  const verifierFactory = await ethers.getContractFactory("HonkVerifier");
+  verifierContract = await verifierFactory.deploy();
 })
 
 it("has correct face embeddings", () => {

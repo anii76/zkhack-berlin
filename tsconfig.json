@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2022",
     "module": "commonjs",
     "outDir": "build",
     "esModuleInterop": true,
@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "noEmitOnError": false,
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"],
