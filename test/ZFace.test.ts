@@ -422,9 +422,13 @@ const threshold = 300_000_000; // Adjust based on your similarity requirements
 const thresholdBytes = quantizedToBytes32(threshold);
 
 // Make Prover.toml
-const proverToml = `probeFace = ["${faceA2.map(v => v.toString()).join('", "')}"]
-referenceFace = ["${faceA1.map(v => v.toString()).join('", "')}"]
-threshold = "${threshold}"
+const probeFace = faceA2.map(v => `[[probeFace]]\nx = "${v}"\n`).join("\n");
+const referenceFace = faceA1.map(v => `[[referenceFace]]\nx = "${v}"\n`).join("\n");
+const thresholdStr = `threshold = "${threshold}"`;
+const proverToml = `# Prover.toml for ZFace Verifier Circuit
+${probeFace}
+${referenceFace}
+${thresholdStr}
 `
 fs.writeFileSync("noir/zface_verifier/Prover.toml", proverToml);
 
