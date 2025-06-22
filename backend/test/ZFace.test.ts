@@ -3,29 +3,10 @@ import { expect } from "chai";
 import hre, { ethers } from "hardhat";
 import { HonkVerifier } from "../typechain-types";
 import { BytesLike } from "ethers";
+import { quantize, quantizedToBytes32 } from "../src/quantize";
+import { sumSquaredDifferences } from "../src/sumSquaredDifferences";
+import { THRESHOLD } from "../src/threshold";
 
-function quantize(value: number): bigint {
-  // Convert a floating-point number to a quantized integer
-  // Scale to 16-bit precision and handle negative numbers
-  const scaled = Math.floor(value * (2 ** 16));
-  // Handle negative numbers using the field prime p
-  const p = BigInt("21888242871839275222246405745257275088548364400416034343698204186575808495616");
-  if (scaled < 0) {
-    return p + BigInt(scaled);
-  }
-  return BigInt(scaled);
-}
-
-function quantizedToBytes32(value: bigint): BytesLike {
-  // Convert quantized value to bytes32 representation
-  // Handle BigInt values properly
-  const hex = value.toString(16).padStart(64, '0'); // Convert to hex and pad to 32 bytes
-  const buffer = new Uint8Array(32);
-  for (let i = 0; i < 32; i++) {
-    buffer[i] = parseInt(hex.substr(i * 2, 2), 16);
-  }
-  return buffer;
-}
 
 // Create test face embeddings (quantized values)
 const faceA1 = [
@@ -426,13 +407,12 @@ const faceB = [
 const faceBBytes: BytesLike[] = faceB.map(quantizedToBytes32);
 
 // Set threshold for similarity (sum of squared differences)
-const threshold = BigInt(300_000_000); // Adjust based on your similarity requirements
-const thresholdBytes = quantizedToBytes32(threshold);
+const thresholdBytes = quantizedToBytes32(THRESHOLD);
 
 // Make Prover.toml
 const probeFace = faceA2.map(v => `[[probeFace]]\nx = "${v.toString()}"\n`).join("\n");
 const referenceFace = faceA1.map(v => `[[referenceFace]]\nx = "${v.toString()}"\n`).join("\n");
-const thresholdStr = `threshold = "${threshold.toString()}"`;
+const thresholdStr = `threshold = "${THRESHOLD.toString()}"`;
 const proverToml = `# Prover.toml for ZFace Verifier Circuit
 ${probeFace}
 ${referenceFace}
@@ -450,31 +430,14 @@ it("has correct face embeddings", () => {
   expect(faceA2).to.have.length(128);
   expect(faceB).to.have.length(128);
 
-  function sumSquaredDifferences(face1: bigint[], face2: bigint[]): bigint {
-    const p = BigInt("21888242871839275222246405745257275088548364400416034343698204186575808495616");
-    const halfP = p / BigInt(2);
-    
-    return face1.reduce((sum, value, index) => {
-      let diff = value - face2[index];
-      
-      // Handle field arithmetic - if diff is greater than half of p, it's actually negative
-      if (diff > halfP) {
-        diff = diff - p; // Convert back to negative
-      } else if (diff < -halfP) {
-        diff = diff + p; // Convert back to positive
-      }
-      
-      return sum + diff * diff;
-    }, BigInt(0));
-  }
 
   const ssdA1A2 = sumSquaredDifferences(faceA1, faceA2);
   const ssdA1B = sumSquaredDifferences(faceA1, faceB);
   const ssdA2B = sumSquaredDifferences(faceA2, faceB);
-  console.debug({ ssdA1A2, ssdA1B, ssdA2B, threshold });
-  expect(Number(ssdA1A2)).to.be.lessThan(Number(threshold));
-  expect(Number(ssdA1B)).to.be.greaterThan(Number(threshold));
-  expect(Number(ssdA2B)).to.be.greaterThan(Number(threshold));
+  console.debug({ ssdA1A2, ssdA1B, ssdA2B, THRESHOLD });
+  expect(Number(ssdA1A2)).to.be.lessThan(Number(THRESHOLD));
+  expect(Number(ssdA1B)).to.be.greaterThan(Number(THRESHOLD));
+  expect(Number(ssdA2B)).to.be.greaterThan(Number(THRESHOLD));
 })
 
 it("proves and verifies on-chain", async () => {
@@ -494,14 +457,13 @@ it("proves and verifies on-chain", async () => {
   const input = { 
     probeFace: faceA2.map(v => ({ x: v.toString() })), 
     referenceFace: faceA1.map(v => ({ x: v.toString() })),
-    threshold: threshold.toString()
+    threshold: THRESHOLD.toString()
   };
   
   const { witness } = await noir.execute(input);
   const { proof, publicInputs } = await backend.generateProof(witness, {
     keccak: true,
   });
-  console.debug({ proof });
   fs.writeFileSync("proof", Buffer.from(proof).toString("hex"));
   fs.writeFileSync("publicInputs", publicInputs.toString());
   
