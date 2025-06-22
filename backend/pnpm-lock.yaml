@@ -7,6 +7,16 @@ settings:
 importers:
 
   .:
+    dependencies:
+      base64url:
+        specifier: ^3.0.1
+        version: 3.0.1
+      crypto-js:
+        specifier: ^4.2.0
+        version: 4.2.0
+      pako:
+        specifier: ^2.1.0
+        version: 2.1.0
     devDependencies:
       '@aztec/bb.js':
         specifier: 0.85.0
@@ -16,13 +26,19 @@ importers:
         version: 1.0.0-beta.6
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0
-        version: 5.0.0(0e5e0e432878fd44e1c6443ab26d7922)
+        version: 5.0.0(n6rypgsk6ynxw3n5pc63tjfpiy)
       '@typechain/ethers-v6':
         specifier: ^0.5.1
         version: 0.5.1(ethers@6.14.4)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)
       '@typechain/hardhat':
         specifier: ^9.1.0
         version: 9.1.0(@typechain/ethers-v6@0.5.1(ethers@6.14.4)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3))(ethers@6.14.4)(hardhat@2.24.3(ts-node@10.9.2(@types/node@24.0.3)(typescript@5.8.3))(typescript@5.8.3))(typechain@8.3.2(typescript@5.8.3))
+      '@types/crypto-js':
+        specifier: ^4.2.2
+        version: 4.2.2
+      '@types/pako':
+        specifier: ^2.0.3
+        version: 2.0.3
       ethers:
         specifier: ^6.14.4
         version: 6.14.4
@@ -464,6 +480,9 @@ packages:
   '@types/concat-stream@1.6.1':
     resolution: {integrity: sha512-eHE4cQPoj6ngxBZMvVf6Hw7Mh4jMW4U9lpGmS5GBPB9RYxlFg+CHaVN7ErNY4W9XfLIEn20b4VDYaIrbq0q4uA==}
 
+  '@types/crypto-js@4.2.2':
+    resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
+
   '@types/form-data@0.0.33':
     resolution: {integrity: sha512-8BSvG1kGm83cyJITQMZSulnl6QV8jqAGreJsc5tPu1Jq0vTSOiY/k24Wx82JRpWwZSqrala6sd5rWi6aNXvqcw==}
 
@@ -490,6 +509,9 @@ packages:
 
   '@types/node@8.10.66':
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
+
+  '@types/pako@2.0.3':
+    resolution: {integrity: sha512-bq0hMV9opAcrmE0Byyo0fY3Ew4tgOevJmQ9grUhpXQhYfyLJ1Kqg3P33JT5fdbT2AjeAjR51zqqVjAL/HMkx7Q==}
 
   '@types/pbkdf2@3.1.2':
     resolution: {integrity: sha512-uRwJqmiXmh9++aSu1VNEn3iIxWOhd8AHXNSdlaLfdAAdSTY9jYVeGWnzejM3dvrkbqE3/hyQkQQ29IFATEGlew==}
@@ -639,6 +661,10 @@ packages:
 
   base-x@3.0.11:
     resolution: {integrity: sha512-xz7wQ8xDhdyP7tQxwdteLYeFfS68tSMNCZ/Y37WJ4bhGfKPpqEIlmIyueQHqOyoPhE6xNUqjzRr8ra0eF9VRvA==}
+
+  base64url@3.0.1:
+    resolution: {integrity: sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==}
+    engines: {node: '>=6.0.0'}
 
   bech32@1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
@@ -853,6 +879,9 @@ packages:
 
   crypt@0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+
+  crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
 
   death@1.1.0:
     resolution: {integrity: sha512-vsV6S4KVHvTGxbEcij7hkWRv0It+sGGWVOM67dQde/o5Xjnr+KmLjxWJii2uEObIrt1CcM9w0Yaovx+iOlIL+w==}
@@ -2702,7 +2731,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.24.3(ts-node@10.9.2(@types/node@24.0.3)(typescript@5.8.3))(typescript@5.8.3)
 
-  '@nomicfoundation/hardhat-toolbox@5.0.0(0e5e0e432878fd44e1c6443ab26d7922)':
+  '@nomicfoundation/hardhat-toolbox@5.0.0(n6rypgsk6ynxw3n5pc63tjfpiy)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.0.9(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.14.4)(hardhat@2.24.3(ts-node@10.9.2(@types/node@24.0.3)(typescript@5.8.3))(typescript@5.8.3)))(chai@4.5.0)(ethers@6.14.4)(hardhat@2.24.3(ts-node@10.9.2(@types/node@24.0.3)(typescript@5.8.3))(typescript@5.8.3))
       '@nomicfoundation/hardhat-ethers': 3.0.9(ethers@6.14.4)(hardhat@2.24.3(ts-node@10.9.2(@types/node@24.0.3)(typescript@5.8.3))(typescript@5.8.3))
@@ -2906,6 +2935,8 @@ snapshots:
     dependencies:
       '@types/node': 24.0.3
 
+  '@types/crypto-js@4.2.2': {}
+
   '@types/form-data@0.0.33':
     dependencies:
       '@types/node': 24.0.3
@@ -2932,6 +2963,8 @@ snapshots:
       undici-types: 7.8.0
 
   '@types/node@8.10.66': {}
+
+  '@types/pako@2.0.3': {}
 
   '@types/pbkdf2@3.1.2':
     dependencies:
@@ -3058,6 +3091,8 @@ snapshots:
   base-x@3.0.11:
     dependencies:
       safe-buffer: 5.2.1
+
+  base64url@3.0.1: {}
 
   bech32@1.1.4: {}
 
@@ -3311,6 +3346,8 @@ snapshots:
       which: 2.0.2
 
   crypt@0.0.2: {}
+
+  crypto-js@4.2.0: {}
 
   death@1.1.0: {}
 
