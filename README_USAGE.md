@@ -5,9 +5,9 @@ This project implements a zero-knowledge proof system that verifies two arrays o
 
 ## Components
 
-1. **Noir Program** (`src/main.nr`): Proves that two arrays are identical
-2. **Solidity Verifier** (`contracts/Verifier.sol`): On-chain verification contract
-3. **Entry Contract** (`contracts/ArrayVerifierEntry.sol`): Tests arrays against [20, 5, 92]
+1. **Noir Program** (`noir/main.nr`): Proves that two arrays are identical
+2. **Solidity Verifier** (`noir/target/zface_verifier.sol`): On-chain verification contract
+3. **Entry Contract** (`contracts/ZFace.sol`): Dapp logic, deployer contract and zface contract allowing the reciever to prove his identity and claim funds.
 
 ## Build Pipeline
 
