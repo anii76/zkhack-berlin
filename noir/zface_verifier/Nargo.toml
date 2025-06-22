@@ -1,5 +1,5 @@
 [package]
-name = "my_noir"
+name = "zface_verifier"
 type = "bin"
 authors = [""]
 compiler_version = "0.39.0"

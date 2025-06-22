@@ -426,7 +426,7 @@ const proverToml = `probeFace = ["${faceA2.map(v => v.toString()).join('", "')}"
 referenceFace = ["${faceA1.map(v => v.toString()).join('", "')}"]
 threshold = "${threshold}"
 `
-fs.writeFileSync("noir/my_noir/Prover.toml", proverToml);
+fs.writeFileSync("noir/zface_verifier/Prover.toml", proverToml);
 
 let verifierContract: HonkVerifier;
 before(async () => {
@@ -466,7 +466,7 @@ it("proves and verifies on-chain", async () => {
   await contract.waitForDeployment();
 
   // Generate a proof
-  const { noir, backend } = await hre.noir.getCircuit("my_noir");
+  const { noir, backend } = await hre.noir.getCircuit("zface_verifier");
 
   
   const input = { 
@@ -510,7 +510,7 @@ it("fails verification with different faces", async () => {
   await contract.waitForDeployment();
 
   // Generate a proof with different probe face
-  const { noir, backend } = await hre.noir.getCircuit("my_noir");
+  const { noir, backend } = await hre.noir.getCircuit("zface_verifier");
 
   const quantizedFaceA = faceA1.map(v => ({ sign: 0, integer: v, fractional: 0 }));
   const quantizedFaceB = faceB.map(v => ({ sign: 0, integer: v, fractional: 0 }));
