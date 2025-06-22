@@ -14,7 +14,7 @@ const config: HardhatUserConfig = {
   networks: {
     arbitrumSepolia: {
       url: "https://sepolia-rollup.arbitrum.io/rpc",
-      accounts: [""]
+      accounts: ["259729b49f1748d2842867a8f3871fe81f8ff14878b32a728e2b3fa6c51b4c63"]
     },
     localhost: {
       url: "http://127.0.0.1:8545"
@@ -32,7 +32,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     // Your API key for Etherscan _
     // Obtain one at https://etherscan.io/ or https://polygonscan.com/
-    apiKey: { arbitrumSepolia: "" }
+    apiKey: { arbitrumSepolia: "WZPM4M5GYVTV33XXNXGT7Y1TKDU2R5SJRH" }
   }
 };
 
