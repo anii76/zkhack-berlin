@@ -4,19 +4,27 @@ import hre, { ethers } from "hardhat";
 import { HonkVerifier } from "../typechain-types";
 import { BytesLike } from "ethers";
 
-function quantize(value: number): number {
+function quantize(value: number): bigint {
   // Convert a floating-point number to a quantized integer
-  // Assuming we want to scale it to 16-bit precision
-  return Math.floor(value * (2 ** 16)); // Scale to 16-bit integer
+  // Scale to 16-bit precision and handle negative numbers
+  const scaled = Math.floor(value * (2 ** 16));
+  // Handle negative numbers using the field prime p
+  const p = BigInt("21888242871839275222246405745257275088548364400416034343698204186575808495616");
+  if (scaled < 0) {
+    return p + BigInt(scaled);
+  }
+  return BigInt(scaled);
 }
 
-function quantizedToBytes32(value: number): BytesLike {
+function quantizedToBytes32(value: bigint): BytesLike {
   // Convert quantized value to bytes32 representation
-  // Assuming quantized values are represented as scaled integers
-  const buffer = new ArrayBuffer(32);
-  const view = new DataView(buffer);
-  view.setUint32(28, value, false); // Store in last 4 bytes, big-endian
-  return new Uint8Array(buffer);
+  // Handle BigInt values properly
+  const hex = value.toString(16).padStart(64, '0'); // Convert to hex and pad to 32 bytes
+  const buffer = new Uint8Array(32);
+  for (let i = 0; i < 32; i++) {
+    buffer[i] = parseInt(hex.substr(i * 2, 2), 16);
+  }
+  return buffer;
 }
 
 // Create test face embeddings (quantized values)
@@ -418,13 +426,13 @@ const faceB = [
 const faceBBytes: BytesLike[] = faceB.map(quantizedToBytes32);
 
 // Set threshold for similarity (sum of squared differences)
-const threshold = 300_000_000; // Adjust based on your similarity requirements
+const threshold = BigInt(300_000_000); // Adjust based on your similarity requirements
 const thresholdBytes = quantizedToBytes32(threshold);
 
 // Make Prover.toml
-const probeFace = faceA2.map(v => `[[probeFace]]\nx = "${v}"\n`).join("\n");
-const referenceFace = faceA1.map(v => `[[referenceFace]]\nx = "${v}"\n`).join("\n");
-const thresholdStr = `threshold = "${threshold}"`;
+const probeFace = faceA2.map(v => `[[probeFace]]\nx = "${v.toString()}"\n`).join("\n");
+const referenceFace = faceA1.map(v => `[[referenceFace]]\nx = "${v.toString()}"\n`).join("\n");
+const thresholdStr = `threshold = "${threshold.toString()}"`;
 const proverToml = `# Prover.toml for ZFace Verifier Circuit
 ${probeFace}
 ${referenceFace}
@@ -441,13 +449,23 @@ it("has correct face embeddings", () => {
   expect(faceA1).to.have.length(128);
   expect(faceA2).to.have.length(128);
   expect(faceB).to.have.length(128);
-  expect(threshold).to.be.a("number");
 
-  function sumSquaredDifferences(face1: number[], face2: number[]): number {
+  function sumSquaredDifferences(face1: bigint[], face2: bigint[]): bigint {
+    const p = BigInt("21888242871839275222246405745257275088548364400416034343698204186575808495616");
+    const halfP = p / BigInt(2);
+    
     return face1.reduce((sum, value, index) => {
-      const diff = value - face2[index];
+      let diff = value - face2[index];
+      
+      // Handle field arithmetic - if diff is greater than half of p, it's actually negative
+      if (diff > halfP) {
+        diff = diff - p; // Convert back to negative
+      } else if (diff < -halfP) {
+        diff = diff + p; // Convert back to positive
+      }
+      
       return sum + diff * diff;
-    }, 0);
+    }, BigInt(0));
   }
 
   const ssdA1A2 = sumSquaredDifferences(faceA1, faceA2);
@@ -474,9 +492,9 @@ it("proves and verifies on-chain", async () => {
 
   
   const input = { 
-    probeFace: faceA2.map(v => ({ x: v })), 
-    referenceFace: faceA1.map(v => ({ x: v })),
-    threshold: threshold
+    probeFace: faceA2.map(v => ({ x: v.toString() })), 
+    referenceFace: faceA1.map(v => ({ x: v.toString() })),
+    threshold: threshold.toString()
   };
   
   const { witness } = await noir.execute(input);
@@ -489,8 +507,8 @@ it("proves and verifies on-chain", async () => {
   expect(publicInputs.length).to.eq(129);
 
   // Verify the proof on-chain
-  // const result = await contract.verify(proof);
-  // expect(result).to.eq(true);
+  const result = await contract.verify(proof);
+  expect(result).to.eq(true);
 
   // You can also verify in JavaScript
   const resultJs = await backend.verifyProof(
@@ -516,8 +534,8 @@ it("fails verification with different faces", async () => {
   // Generate a proof with different probe face
   const { noir, backend } = await hre.noir.getCircuit("zface_verifier");
 
-  const quantizedFaceA = faceA1.map(v => ({ sign: 0, integer: v, fractional: 0 }));
-  const quantizedFaceB = faceB.map(v => ({ sign: 0, integer: v, fractional: 0 }));
+  const quantizedFaceA = faceA1.map(v => ({ x: v.toString() }));
+  const quantizedFaceB = faceB.map(v => ({ x: v.toString() }));
   
   // This should fail in the circuit execution because sum of squared differences > threshold
   await expect(noir.execute({ 
