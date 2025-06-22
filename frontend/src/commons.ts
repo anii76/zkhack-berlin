@@ -1,10 +1,4 @@
 // TypeScript type declarations
-declare global {
-  const faceapi: any;
-  const $: any;
-}
-
-export {};
 
 interface ExampleItem {
   uri: string;
