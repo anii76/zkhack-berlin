@@ -1,4 +1,4 @@
-import hre, { ethers } from "hardhat";
+import hre from "hardhat";
 
 // faces should be already quantized
 export async function faceProver(referenceFace: bigint[], probeFace: bigint[], threshold: number): Promise<{ witness: Uint8Array; publicInputs: string[]; proof: Uint8Array; }> {
