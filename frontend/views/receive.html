@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-slate-50 justify-between group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div>
+        <div class="flex items-center bg-slate-50 p-4 pb-2 justify-between">
+          <div class="text-[#0d141c] flex size-12 shrink-0 items-center" data-icon="ArrowLeft" data-size="24px" data-weight="regular">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+              <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path>
+            </svg>
+          </div>
+          <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Receive Funds</h2>
+        </div>
+        <h2 class="text-[#0d141c] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Secure your funds with facial recognition</h2>
+        <p class="text-[#0d141c] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+          To access your funds, we need to verify your identity using a quick face scan. This ensures only you can access the funds.
+        </p>
+      </div>
+      <div>
+        <div class="flex px-4 py-3 w-full max-w-md mx-auto">
+          <a id="startFaceScanBtn" href="/face-scan"
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 flex-1 bg-[#0c7ff2] text-slate-50 text-base font-bold leading-normal tracking-[0.015em]"
+          >
+            <span class="truncate">Start Face Scan</span>
+          </a>
+        </div>
+        <div id="claim-success" class="hidden flex flex-col items-center justify-center py-6 px-2 text-center">
+          <div class="text-green-600 text-xl font-bold mb-2">🎉 Success!</div>
+          <div class="text-[#0d141c] text-base font-normal mb-2">You have claimed your funds.</div>
+          <div id="claim-details" class="text-[#0d141c] text-sm font-mono"></div>
+        </div>
+        <div class="h-5 bg-slate-50"></div>
+      </div>
+    </div>
+    <script>
+      // Show claim success if ?claimed=1&amount=...&address=... in URL
+      function getQueryParams() {
+        const params = {};
+        window.location.search.replace(/\??([^=&]+)=([^&]*)/g, function(_, k, v) {
+          params[k] = decodeURIComponent(v);
+        });
+        return params;
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        const params = getQueryParams();
+        if (params.claimed === '1') {
+          document.getElementById('claim-success').classList.remove('hidden');
+          let details = '';
+          if (params.amount) details += `<div>Amount: <span class='font-bold'>${params.amount}</span></div>`;
+          if (params.address) details += `<div>Address: <span class='font-bold'>${params.address}</span></div>`;
+          document.getElementById('claim-details').innerHTML = details;
+          document.getElementById('startFaceScanBtn').style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html> 

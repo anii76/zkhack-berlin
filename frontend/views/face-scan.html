@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-slate-50 justify-between group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div>
+        <div class="flex items-center bg-slate-50 p-4 pb-2 justify-between">
+          <div class="text-[#0d141c] flex size-12 shrink-0 items-center" data-icon="X" data-size="24px" data-weight="regular">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+              <path
+                d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+              ></path>
+            </svg>
+          </div>
+          <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Face Scan</h2>
+        </div>
+        <h2 class="text-[#0d141c] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Position your face in the frame</h2>
+        <p class="text-[#0d141c] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">Ensure your face is fully visible and well-lit for accurate scanning.</p>
+        <div class="flex w-full grow bg-slate-50 @container p-4">
+          <div class="w-full max-w-xs gap-1 overflow-hidden bg-slate-50 @[480px]:gap-2 aspect-[2/3] rounded-lg flex items-center justify-center video-container relative" style="height: 320px; max-width: 100vw;">
+            <video id="inputVideo" autoplay muted playsinline class="rounded-lg bg-black w-full h-full object-cover"></video>
+            <canvas id="overlay" class="rounded-lg w-full h-full absolute top-0 left-0"></canvas>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex px-4 py-3 w-full max-w-md mx-auto">
+          <button
+            id="scanFaceBtn"
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 flex-1 bg-[#0c7ff2] text-slate-50 text-base font-bold leading-normal tracking-[0.015em]"
+          >
+            <span class="truncate">Scan Face</span>
+          </button>
+        </div>
+        <div id="scan-success" class="hidden flex flex-col items-center justify-center py-6">
+          <div class="text-green-600 text-xl font-bold mb-2">🎉 Success!</div>
+          <div class="text-[#0d141c] text-base font-normal mb-2">You have claimed your funds.</div>
+        </div>
+        <div id="scan-loading" class="hidden flex flex-col items-center justify-center py-6">
+          <div class="text-blue-600 text-xl font-bold mb-2">Scanning...</div>
+        </div>
+        <div class="h-5 bg-slate-50"></div>
+      </div>
+    </div>
+    <script src="/face-api.js"></script>
+    <script>
+      let stream;
+      let isModelLoaded = false;
+      async function startWebcam() {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: 'environment' } } }).catch(async () => {
+          return await navigator.mediaDevices.getUserMedia({ video: true });
+        });
+        const videoEl = document.getElementById('inputVideo');
+        videoEl.srcObject = stream;
+      }
+      async function loadModels() {
+        await faceapi.nets.tinyFaceDetector.load('/models/');
+        isModelLoaded = true;
+      }
+      async function detectFace() {
+        const videoEl = document.getElementById('inputVideo');
+        const canvas = document.getElementById('overlay');
+        const displaySize = { width: videoEl.videoWidth, height: videoEl.videoHeight };
+        faceapi.matchDimensions(canvas, displaySize);
+        const detection = await faceapi.detectSingleFace(videoEl, new faceapi.TinyFaceDetectorOptions());
+        const resizedDetections = detection ? faceapi.resizeResults(detection, displaySize) : null;
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        if (resizedDetections) {
+          faceapi.draw.drawDetections(canvas, resizedDetections);
+        }
+        return detection;
+      }
+      document.addEventListener('DOMContentLoaded', async function() {
+        await loadModels();
+        await startWebcam();
+        document.getElementById('scanFaceBtn').onclick = async function() {
+          document.getElementById('scan-loading').classList.remove('hidden');
+          this.disabled = true;
+          this.innerHTML = '<span class="truncate">Scanning...</span>';
+          const detection = await detectFace();
+          setTimeout(() => {
+            document.getElementById('scan-loading').classList.add('hidden');
+            if (detection) {
+              if (stream) stream.getTracks().forEach(t => t.stop());
+              // Mock values for amount/address
+              const amount = '0.5ETH';
+              const address = '0x123...abc';
+              window.location.href = `/success?amount=${encodeURIComponent(amount)}&address=${encodeURIComponent(address)}`;
+            } else {
+              this.disabled = false;
+              this.innerHTML = '<span class="truncate">Scan Face</span>';
+              alert('No face detected. Try again.');
+            }
+          }, 1200);
+        };
+      });
+    </script>
+  </body>
+</html> 
