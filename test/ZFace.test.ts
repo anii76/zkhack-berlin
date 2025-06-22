@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { expect } from "chai";
 import hre from "hardhat";
 const { ethers } = hre;
-import { HonkVerifier } from "../typechain-types";
+import { HonkVerifier, HonkVerifier__factory } from "../typechain-types";
 import { BytesLike } from "ethers";
 import { quantize, quantizedToBytes32 } from "../src/quantize";
 import { sumSquaredDifferences } from "../src/sumSquaredDifferences";
@@ -423,7 +423,8 @@ fs.writeFileSync("noir/zface_verifier/Prover.toml", proverToml);
 
 let verifierContract: HonkVerifier;
 before(async () => {
-  const verifierFactory = await ethers.getContractFactory("HonkVerifier");
+  const [signer] = await ethers.getSigners();
+  const verifierFactory = new HonkVerifier__factory(signer);
   verifierContract = await verifierFactory.deploy();
 })
 

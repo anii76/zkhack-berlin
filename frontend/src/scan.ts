@@ -1,10 +1,4 @@
-// TypeScript global declarations for browser globals
-declare global {
-  const faceapi: any;
-  interface Window { ethers: any; ethereum: any; }
-}
-
-export {};
+// Frontend scan functionality
 
 let stream: MediaStream | undefined;
 let isModelLoaded = false;
