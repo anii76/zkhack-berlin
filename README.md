@@ -11,7 +11,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   <h1>ZFace Cash</h1>
   
   <p>
-    
+    <strong>Zero-Knowledge Face Verification for Secure Fund Claiming</strong>
   </p>
   
   
@@ -19,7 +19,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 <h4>
     <a href="https://www.youtube.com/watch?v=QlWIbjhhyFk&t=1s/">View Demo</a>
   <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template">Documentation</a>
+    <a href="https://github.com/anii76/zkhack-berlin">Documentation</a>
   <span> · </span>
     <a href="https://zk-hack-berlin.devfolio.co/dashboard">DevFolio</a>
   </h4>
@@ -29,7 +29,26 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 
 ## About the Project
-Effortl3ssAI is a prompt-to-on-chain action solution enabling users to simply provide a text prompt, and we handle the rest of the Web3 actions, such as token transfers, balance checks, NFT minting, staking, voting, and interacting with smart contracts. The platform also integrates with DeFi aggregators, making the process seamless. By providing a user-friendly experience, it aims to simplify the often complex world of Web3 and onboard millions of users to blockchain-based experiences, ensuring they can engage effortlessly with decentralized applications (dApps).
+
+ZFace Cash is a revolutionary zero-knowledge proof system that enables secure fund claiming through biometric face verification. The platform allows users to deposit funds into a one time address smart contract that can only be withdrawn by proving identity through a zero-knowledge face verification process.
+
+### Key Features
+
+- **🔐 Zero-Knowledge Face Verification**: Users can claim funds by proving their identity through face verification without revealing their actual biometric data
+- **💰 Secure Fund Management**: Smart contracts hold funds until proper face verification is completed
+- **🌐 Privacy-Preserving**: No biometric data is stored on-chain, only cryptographic proofs
+- **⚡ Efficient Verification**: Fast on-chain verification using Noir zero-knowledge circuits
+- **🔒 Trustless Architecture**: No central authority required for identity verification
+
+### How It Works
+
+1. **Deposit**: Users deposit funds into a ZFace smart contract with their face encoding stored as public inputs
+2. **Face Registration**: A 128-dimensional face encoding is generated and stored in the contract
+3. **Claim Process**: To withdraw funds, users must provide a zero-knowledge proof that their current face matches the registered encoding
+4. **Verification**: The smart contract verifies the proof on-chain using the Noir verifier
+5. **Fund Release**: If verification succeeds, funds are automatically transferred to the claimant
+
+This system ensures that only the rightful owner with the correct face can claim the funds, while maintaining complete privacy of biometric data through zero-knowledge proofs.
 
 <!-- TechStack -->
 ### Tech Stack
@@ -61,9 +80,17 @@ Effortl3ssAI is a prompt-to-on-chain action solution enabling users to simply pr
 </details>
 
 <!-- Features -->
-### Integrations
+### Core Components
 
-We leveraged a range of cutting-edge technologies to bring Effortl3ssAI to life. Here’s how everything is pieced together: we used Phala Network to develop our AI agent, which translates user prompts into direct on-chain actions;  to simplify the process of inputting addresses, we integrated the Ethereum Name Service (ENS); for user authentication and wallet connectivity, we integrated Reown AppKit, offers a dual login system with both Web3 wallets for crypto-native users, and Web2 social authentication methods for effortless onboarding Web2 users; for Defi integrations we use 1inch for Swap and Circle for Cross-Chain Transfer.
+ZFace Cash is built with cutting-edge zero-knowledge technology:
+
+- **Noir Circuits**: Custom zero-knowledge circuits for face verification using the Noir programming language
+- **Barretenberg Backend**: High-performance proof generation and verification using the Barretenberg proving system
+- **Smart Contract Integration**: Solidity contracts that verify proofs on-chain and manage fund distribution
+- **Face Encoding**: 128-dimensional face embeddings for robust biometric verification
+- **Threshold Verification**: Configurable similarity thresholds for face matching accuracy
+
+The system leverages advanced cryptographic techniques to ensure that users can prove their identity without compromising their privacy or security.
 
 <!-- Color Reference -->
 ### Color Reference
@@ -79,11 +106,8 @@ We leveraged a range of cutting-edge technologies to bring Effortl3ssAI to life.
 <!-- Env Variables -->
 ### Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables 
 
-`API_KEY`
-
-`ANOTHER_API_KEY`
 
 <!-- Getting Started -->
 ## Getting Started
@@ -128,7 +152,9 @@ Clone the project
 Setup the network to deploy into in `hardhat.config.ts`.
 
 ```bash
-  cd my-project
+  npx hardhat ignition deploy ignition/modules/Deployer.ts --network arbitrumSepolia --verify --deployment-id testnet-deployment-1
+
+  npx hardhat ignition deploy ignition/modules/ZFace.ts --network arbitrumSepolia --verify --deployment-id testnet-deployment-2
 ```
 
 Install dependencies
@@ -146,8 +172,13 @@ Start the server
 <!-- Roadmap -->
 ## Roadmap
 
-* [x] Todo 1
-* [ ] Todo 2
+* [x] Zero-knowledge face verification circuit
+* [x] Smart contract integration
+* [x] Basic frontend interface
+* [ ] Multi-chain deployment
+* [ ] Advanced face recognition algorithms
+* [ ] Mobile app integration
+* [ ] Batch verification support
 
 
 <!-- Contributing -->
@@ -160,45 +191,12 @@ Start the server
 
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
-
-
-<!-- Code of Conduct -->
-### Code of Conduct
-
-Please read the [Code of Conduct](https://github.com/Louis3797/awesome-readme-template/blob/master/CODE_OF_CONDUCT.md)
-
 <!-- License -->
 ## License
 
 Distributed under the no License. See <a href="/LICENCE.txt">LICENSE.txt</a> for more information.
 
 
-<!-- Contact -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/Louis3797/awesome-readme-template](https://github.com/Louis3797/awesome-readme-template)
-
-
 <!-- Acknowledgments -->
 ## Acknowledgements
 
-Use this section to mention useful resources and libraries that you have used in your projects.
-
- - [Shields.io](https://shields.io/)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md#travel--places)
- - [Readme Template](https://github.com/othneildrew/Best-README-Template)
-
-
-
-
-## installation
-```bash
-# dont forget to install the dependencies
-pip install requirements.txt
-# then create an env file
-cp .env.example .env
-```
