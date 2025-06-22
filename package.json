@@ -1,0 +1,63 @@
+{
+  "name": "zface.cash",
+  "version": "1.0.0",
+  "description": "**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "./build.sh && pnpm compile",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.ts",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "test": "hardhat test",
+    "test:proof": "hardhat run scripts/test-proof.ts",
+    "test:proof:local": "hardhat run scripts/test-proof.ts --network localhost",
+    "node": "hardhat node",
+    "clean": "hardhat clean && rm -rf target"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anii76/zkhack-berlin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anii76/zkhack-berlin/issues"
+  },
+  "homepage": "https://github.com/anii76/zkhack-berlin#readme",
+  "devDependencies": {
+    "@noir-lang/backend_barretenberg": "^0.36.0",
+    "@noir-lang/noir_js": "1.0.0-beta.7",
+    "@noir-lang/noirc_abi": "1.0.0-beta.7",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-ignition": "^0.15.11",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.12",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": ">=9.1.0",
+    "@types/node": ">=18.0.0",
+    "chai": "^4.5.0",
+    "dotenv": "^16.5.0",
+    "ethers": "^6.4.0",
+    "fflate": "^0.8.2",
+    "hardhat": "^2.14.0",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solidity-coverage": "^0.8.16",
+    "ts-node": ">=8.0.0",
+    "typechain": "^8.3.2",
+    "typescript": ">=4.5.0"
+  },
+  "dependencies": {
+    "@aztec/bb.js": "0.84.0"
+  }
+}
