@@ -1,7 +1,0 @@
-[package]
-name = "my_noir"
-type = "bin"
-authors = [""]
-
-[dependencies]
-quantized = { git = "https://github.com/hashcloak/noir-fixed-point", tag = "v0.1.3" }
