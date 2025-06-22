@@ -1,4 +1,770 @@
+# Prover.toml for ZFace Verifier Circuit
+[[probeFace]]
+x = "-5839"
 
-probeFace = ["-5839", "6974", "4228", "-2176", "-3126", "-7135", "-117", "-8304", "6049", "-3538", "16794", "-3714", "-15744", "-5029", "-375", "7790", "-7180", "-3164", "-7270", "-5333", "-350", "191", "-1817", "51", "-4845", "-17967", "-6106", "-6636", "-956", "-4934", "1632", "6856", "-10520", "-5747", "112", "1339", "106", "-2554", "10931", "-1956", "-6858", "-2484", "776", "14497", "10101", "375", "338", "-4456", "2440", "-15649", "-2331", "6326", "658", "5319", "1070", "-6362", "1765", "3838", "-13609", "-71", "1134", "-12985", "-8276", "-5049", "13103", "8076", "-3465", "-5860", "13114", "-9315", "-2991", "2096", "-5711", "-9207", "-17005", "5071", "22433", "9504", "-10067", "2612", "-6734", "-2362", "4540", "201", "-487", "-2903", "-1954", "4817", "11966", "-5033", "922", "13527", "-3367", "1725", "872", "-874", "-999", "-273", "-5002", "1670", "9430", "-6961", "3299", "7308", "-11427", "4633", "374", "-2493", "4477", "-2251", "-1353", "-3550", "12036", "-12624", "16269", "11577", "-2832", "7650", "-240", "5264", "-2073", "-4722", "-10005", "-4389", "5442", "1692", "-591", "-496"]
-referenceFace = ["-2755", "5805", "3021", "-992", "-2646", "-5252", "780", "-6740", "4346", "-3096", "15840", "-4628", "-15752", "-5982", "1533", "6887", "-6401", "-1825", "-9423", "-5908", "-1435", "887", "-599", "96", "-3790", "-17163", "-4892", "-7259", "1403", "-6314", "2201", "6653", "-9861", "-5046", "477", "2011", "-949", "-3110", "13867", "-1336", "-6538", "-2103", "1421", "15213", "9966", "-866", "-8", "-2589", "4349", "-16041", "-1132", "7049", "4990", "6219", "2341", "-5790", "3106", "4055", "-14943", "1655", "1964", "-12306", "-7392", "-4438", "11887", "7735", "-3016", "-5526", "12298", "-9946", "-2690", "3138", "-5596", "-8738", "-16746", "4386", "21072", "10446", "-10651", "988", "-5027", "-3349", "4344", "404", "-2065", "-3189", "-921", "6191", "10772", "-5275", "559", "12650", "-2474", "651", "704", "-2108", "-197", "-685", "-4517", "3287", "8903", "-10206", "4647", "5480", "-12514", "6039", "131", "-3410", "4842", "-1834", "-2543", "-1070", "13616", "-13460", "16892", "11243", "-3483", "6583", "-769", "7050", "-2073", "-4884", "-9355", "-5864", "3828", "1956", "-386", "-234"]
+[[probeFace]]
+x = "6974"
+
+[[probeFace]]
+x = "4228"
+
+[[probeFace]]
+x = "-2176"
+
+[[probeFace]]
+x = "-3126"
+
+[[probeFace]]
+x = "-7135"
+
+[[probeFace]]
+x = "-117"
+
+[[probeFace]]
+x = "-8304"
+
+[[probeFace]]
+x = "6049"
+
+[[probeFace]]
+x = "-3538"
+
+[[probeFace]]
+x = "16794"
+
+[[probeFace]]
+x = "-3714"
+
+[[probeFace]]
+x = "-15744"
+
+[[probeFace]]
+x = "-5029"
+
+[[probeFace]]
+x = "-375"
+
+[[probeFace]]
+x = "7790"
+
+[[probeFace]]
+x = "-7180"
+
+[[probeFace]]
+x = "-3164"
+
+[[probeFace]]
+x = "-7270"
+
+[[probeFace]]
+x = "-5333"
+
+[[probeFace]]
+x = "-350"
+
+[[probeFace]]
+x = "191"
+
+[[probeFace]]
+x = "-1817"
+
+[[probeFace]]
+x = "51"
+
+[[probeFace]]
+x = "-4845"
+
+[[probeFace]]
+x = "-17967"
+
+[[probeFace]]
+x = "-6106"
+
+[[probeFace]]
+x = "-6636"
+
+[[probeFace]]
+x = "-956"
+
+[[probeFace]]
+x = "-4934"
+
+[[probeFace]]
+x = "1632"
+
+[[probeFace]]
+x = "6856"
+
+[[probeFace]]
+x = "-10520"
+
+[[probeFace]]
+x = "-5747"
+
+[[probeFace]]
+x = "112"
+
+[[probeFace]]
+x = "1339"
+
+[[probeFace]]
+x = "106"
+
+[[probeFace]]
+x = "-2554"
+
+[[probeFace]]
+x = "10931"
+
+[[probeFace]]
+x = "-1956"
+
+[[probeFace]]
+x = "-6858"
+
+[[probeFace]]
+x = "-2484"
+
+[[probeFace]]
+x = "776"
+
+[[probeFace]]
+x = "14497"
+
+[[probeFace]]
+x = "10101"
+
+[[probeFace]]
+x = "375"
+
+[[probeFace]]
+x = "338"
+
+[[probeFace]]
+x = "-4456"
+
+[[probeFace]]
+x = "2440"
+
+[[probeFace]]
+x = "-15649"
+
+[[probeFace]]
+x = "-2331"
+
+[[probeFace]]
+x = "6326"
+
+[[probeFace]]
+x = "658"
+
+[[probeFace]]
+x = "5319"
+
+[[probeFace]]
+x = "1070"
+
+[[probeFace]]
+x = "-6362"
+
+[[probeFace]]
+x = "1765"
+
+[[probeFace]]
+x = "3838"
+
+[[probeFace]]
+x = "-13609"
+
+[[probeFace]]
+x = "-71"
+
+[[probeFace]]
+x = "1134"
+
+[[probeFace]]
+x = "-12985"
+
+[[probeFace]]
+x = "-8276"
+
+[[probeFace]]
+x = "-5049"
+
+[[probeFace]]
+x = "13103"
+
+[[probeFace]]
+x = "8076"
+
+[[probeFace]]
+x = "-3465"
+
+[[probeFace]]
+x = "-5860"
+
+[[probeFace]]
+x = "13114"
+
+[[probeFace]]
+x = "-9315"
+
+[[probeFace]]
+x = "-2991"
+
+[[probeFace]]
+x = "2096"
+
+[[probeFace]]
+x = "-5711"
+
+[[probeFace]]
+x = "-9207"
+
+[[probeFace]]
+x = "-17005"
+
+[[probeFace]]
+x = "5071"
+
+[[probeFace]]
+x = "22433"
+
+[[probeFace]]
+x = "9504"
+
+[[probeFace]]
+x = "-10067"
+
+[[probeFace]]
+x = "2612"
+
+[[probeFace]]
+x = "-6734"
+
+[[probeFace]]
+x = "-2362"
+
+[[probeFace]]
+x = "4540"
+
+[[probeFace]]
+x = "201"
+
+[[probeFace]]
+x = "-487"
+
+[[probeFace]]
+x = "-2903"
+
+[[probeFace]]
+x = "-1954"
+
+[[probeFace]]
+x = "4817"
+
+[[probeFace]]
+x = "11966"
+
+[[probeFace]]
+x = "-5033"
+
+[[probeFace]]
+x = "922"
+
+[[probeFace]]
+x = "13527"
+
+[[probeFace]]
+x = "-3367"
+
+[[probeFace]]
+x = "1725"
+
+[[probeFace]]
+x = "872"
+
+[[probeFace]]
+x = "-874"
+
+[[probeFace]]
+x = "-999"
+
+[[probeFace]]
+x = "-273"
+
+[[probeFace]]
+x = "-5002"
+
+[[probeFace]]
+x = "1670"
+
+[[probeFace]]
+x = "9430"
+
+[[probeFace]]
+x = "-6961"
+
+[[probeFace]]
+x = "3299"
+
+[[probeFace]]
+x = "7308"
+
+[[probeFace]]
+x = "-11427"
+
+[[probeFace]]
+x = "4633"
+
+[[probeFace]]
+x = "374"
+
+[[probeFace]]
+x = "-2493"
+
+[[probeFace]]
+x = "4477"
+
+[[probeFace]]
+x = "-2251"
+
+[[probeFace]]
+x = "-1353"
+
+[[probeFace]]
+x = "-3550"
+
+[[probeFace]]
+x = "12036"
+
+[[probeFace]]
+x = "-12624"
+
+[[probeFace]]
+x = "16269"
+
+[[probeFace]]
+x = "11577"
+
+[[probeFace]]
+x = "-2832"
+
+[[probeFace]]
+x = "7650"
+
+[[probeFace]]
+x = "-240"
+
+[[probeFace]]
+x = "5264"
+
+[[probeFace]]
+x = "-2073"
+
+[[probeFace]]
+x = "-4722"
+
+[[probeFace]]
+x = "-10005"
+
+[[probeFace]]
+x = "-4389"
+
+[[probeFace]]
+x = "5442"
+
+[[probeFace]]
+x = "1692"
+
+[[probeFace]]
+x = "-591"
+
+[[probeFace]]
+x = "-496"
+
+[[referenceFace]]
+x = "-2755"
+
+[[referenceFace]]
+x = "5805"
+
+[[referenceFace]]
+x = "3021"
+
+[[referenceFace]]
+x = "-992"
+
+[[referenceFace]]
+x = "-2646"
+
+[[referenceFace]]
+x = "-5252"
+
+[[referenceFace]]
+x = "780"
+
+[[referenceFace]]
+x = "-6740"
+
+[[referenceFace]]
+x = "4346"
+
+[[referenceFace]]
+x = "-3096"
+
+[[referenceFace]]
+x = "15840"
+
+[[referenceFace]]
+x = "-4628"
+
+[[referenceFace]]
+x = "-15752"
+
+[[referenceFace]]
+x = "-5982"
+
+[[referenceFace]]
+x = "1533"
+
+[[referenceFace]]
+x = "6887"
+
+[[referenceFace]]
+x = "-6401"
+
+[[referenceFace]]
+x = "-1825"
+
+[[referenceFace]]
+x = "-9423"
+
+[[referenceFace]]
+x = "-5908"
+
+[[referenceFace]]
+x = "-1435"
+
+[[referenceFace]]
+x = "887"
+
+[[referenceFace]]
+x = "-599"
+
+[[referenceFace]]
+x = "96"
+
+[[referenceFace]]
+x = "-3790"
+
+[[referenceFace]]
+x = "-17163"
+
+[[referenceFace]]
+x = "-4892"
+
+[[referenceFace]]
+x = "-7259"
+
+[[referenceFace]]
+x = "1403"
+
+[[referenceFace]]
+x = "-6314"
+
+[[referenceFace]]
+x = "2201"
+
+[[referenceFace]]
+x = "6653"
+
+[[referenceFace]]
+x = "-9861"
+
+[[referenceFace]]
+x = "-5046"
+
+[[referenceFace]]
+x = "477"
+
+[[referenceFace]]
+x = "2011"
+
+[[referenceFace]]
+x = "-949"
+
+[[referenceFace]]
+x = "-3110"
+
+[[referenceFace]]
+x = "13867"
+
+[[referenceFace]]
+x = "-1336"
+
+[[referenceFace]]
+x = "-6538"
+
+[[referenceFace]]
+x = "-2103"
+
+[[referenceFace]]
+x = "1421"
+
+[[referenceFace]]
+x = "15213"
+
+[[referenceFace]]
+x = "9966"
+
+[[referenceFace]]
+x = "-866"
+
+[[referenceFace]]
+x = "-8"
+
+[[referenceFace]]
+x = "-2589"
+
+[[referenceFace]]
+x = "4349"
+
+[[referenceFace]]
+x = "-16041"
+
+[[referenceFace]]
+x = "-1132"
+
+[[referenceFace]]
+x = "7049"
+
+[[referenceFace]]
+x = "4990"
+
+[[referenceFace]]
+x = "6219"
+
+[[referenceFace]]
+x = "2341"
+
+[[referenceFace]]
+x = "-5790"
+
+[[referenceFace]]
+x = "3106"
+
+[[referenceFace]]
+x = "4055"
+
+[[referenceFace]]
+x = "-14943"
+
+[[referenceFace]]
+x = "1655"
+
+[[referenceFace]]
+x = "1964"
+
+[[referenceFace]]
+x = "-12306"
+
+[[referenceFace]]
+x = "-7392"
+
+[[referenceFace]]
+x = "-4438"
+
+[[referenceFace]]
+x = "11887"
+
+[[referenceFace]]
+x = "7735"
+
+[[referenceFace]]
+x = "-3016"
+
+[[referenceFace]]
+x = "-5526"
+
+[[referenceFace]]
+x = "12298"
+
+[[referenceFace]]
+x = "-9946"
+
+[[referenceFace]]
+x = "-2690"
+
+[[referenceFace]]
+x = "3138"
+
+[[referenceFace]]
+x = "-5596"
+
+[[referenceFace]]
+x = "-8738"
+
+[[referenceFace]]
+x = "-16746"
+
+[[referenceFace]]
+x = "4386"
+
+[[referenceFace]]
+x = "21072"
+
+[[referenceFace]]
+x = "10446"
+
+[[referenceFace]]
+x = "-10651"
+
+[[referenceFace]]
+x = "988"
+
+[[referenceFace]]
+x = "-5027"
+
+[[referenceFace]]
+x = "-3349"
+
+[[referenceFace]]
+x = "4344"
+
+[[referenceFace]]
+x = "404"
+
+[[referenceFace]]
+x = "-2065"
+
+[[referenceFace]]
+x = "-3189"
+
+[[referenceFace]]
+x = "-921"
+
+[[referenceFace]]
+x = "6191"
+
+[[referenceFace]]
+x = "10772"
+
+[[referenceFace]]
+x = "-5275"
+
+[[referenceFace]]
+x = "559"
+
+[[referenceFace]]
+x = "12650"
+
+[[referenceFace]]
+x = "-2474"
+
+[[referenceFace]]
+x = "651"
+
+[[referenceFace]]
+x = "704"
+
+[[referenceFace]]
+x = "-2108"
+
+[[referenceFace]]
+x = "-197"
+
+[[referenceFace]]
+x = "-685"
+
+[[referenceFace]]
+x = "-4517"
+
+[[referenceFace]]
+x = "3287"
+
+[[referenceFace]]
+x = "8903"
+
+[[referenceFace]]
+x = "-10206"
+
+[[referenceFace]]
+x = "4647"
+
+[[referenceFace]]
+x = "5480"
+
+[[referenceFace]]
+x = "-12514"
+
+[[referenceFace]]
+x = "6039"
+
+[[referenceFace]]
+x = "131"
+
+[[referenceFace]]
+x = "-3410"
+
+[[referenceFace]]
+x = "4842"
+
+[[referenceFace]]
+x = "-1834"
+
+[[referenceFace]]
+x = "-2543"
+
+[[referenceFace]]
+x = "-1070"
+
+[[referenceFace]]
+x = "13616"
+
+[[referenceFace]]
+x = "-13460"
+
+[[referenceFace]]
+x = "16892"
+
+[[referenceFace]]
+x = "11243"
+
+[[referenceFace]]
+x = "-3483"
+
+[[referenceFace]]
+x = "6583"
+
+[[referenceFace]]
+x = "-769"
+
+[[referenceFace]]
+x = "7050"
+
+[[referenceFace]]
+x = "-2073"
+
+[[referenceFace]]
+x = "-4884"
+
+[[referenceFace]]
+x = "-9355"
+
+[[referenceFace]]
+x = "-5864"
+
+[[referenceFace]]
+x = "3828"
+
+[[referenceFace]]
+x = "1956"
+
+[[referenceFace]]
+x = "-386"
+
+[[referenceFace]]
+x = "-234"
+
 threshold = "300000000"
