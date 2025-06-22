@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.27;
 
-import {HonkVerifier} from "../noir/target/my_noir.sol";
+import {HonkVerifier} from "../noir/target/zface_verifier.sol";
 
 contract ZFace {
     HonkVerifier public verifier;
