@@ -464,7 +464,8 @@ it("proves and verifies on-chain", async () => {
   const { proof, publicInputs } = await backend.generateProof(witness, {
     keccak: true,
   });
-  console.debug({ publicInputs, witness, proof });
+  fs.writeFileSync("proof", Buffer.from(proof).toString("hex"));
+  fs.writeFileSync("publicInputs", publicInputs.toString());
   
   // Verify that public inputs match (reference face + threshold)
   expect(publicInputs.length).to.eq(129);
