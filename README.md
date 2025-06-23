@@ -21,7 +21,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   <span> · </span>
     <a href="https://github.com/anii76/zkhack-berlin">Documentation</a>
   <span> · </span>
-    <a href="https://zk-hack-berlin.devfolio.co/dashboard">DevFolio</a>
+    <a href="http://devfolio.co/projects/zfacecash-7589">DevFolio</a>
   </h4>
 </div>
 
